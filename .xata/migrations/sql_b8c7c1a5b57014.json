@@ -1,0 +1,17 @@
+{
+  "done": true,
+  "migration": {
+    "name": "sql_b8c7c1a5b57014",
+    "operations": [
+      {
+        "sql": {
+          "up": "CREATE UNIQUE INDEX sessions_session_token_key ON sessions USING btree (session_token)"
+        }
+      }
+    ]
+  },
+  "migrationType": "inferred",
+  "name": "sql_b8c7c1a5b57014",
+  "parent": "sql_e78884a2847d80",
+  "startedAt": "2024-06-23T10:00:44.678982Z"
+}

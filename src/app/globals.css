@@ -2,32 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
+@layer utilities {
+  * {
+    @apply transition-all duration-100;
+  }
+  body {
+    @apply bg-white font-[Rubik] text-[15px] text-gray-800;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+  .hide-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scroll::-webkit-scrollbar {
+    @apply hidden;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
+@layer components {
+  p > a {
+    @apply text-primary;
+  }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  p > img {
+    @apply hidden;
+  }
+
+  textarea {
+    @apply !outline-none active:!outline-none !ring-0 border-none resize-none;
+  }
+
+  input, .input, select {
+    @apply !outline-none active:!outline-none !ring-0;
+  }
+
+  img, Image {
+    @apply select-none;
+  }
+
+  .rounded-lg {
+    @apply !rounded-[1rem];
+  }
+
+  .btn {
+    @apply font-normal rounded-lg;
+  }
+  
+  .tab-active {
+    @apply !rounded-2xl;
+  }
+
+  .modal {
+    @apply modal-bottom min-[450px]:modal-middle;
+
+    .modal-box {
+      @apply border;
+    }
+  }
+
+  .textmark-indonesia {
+    @apply !text-transparent bg-clip-text bg-[linear-gradient(180deg,_#C8102E_50%,_#A0AEC0_50%)];
+  }
+  
+  .textmark-rainbow {
+    @apply !text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-rose-400 to-lime-400;
   }
 }
