@@ -1,7 +1,9 @@
 import { Metadata } from "next";
 import {
   LuBookMarked,
+  LuCalendarHeart,
   LuCode2,
+  LuFlower,
   LuGamepad2,
   LuHome,
   LuHotel,
@@ -89,6 +91,8 @@ export const POST_CATEGORY = [
   { icon: LuHome, label: "Beranda", href: "/" },
   { icon: LuBookMarked, label: "Pendidikan", href: "/pendidikan" },
   { icon: LuSiren, label: "Fakta Menarik", href: "/fakta-menarik" },
+  { icon: LuCalendarHeart, label: "Nasihat", href: "/nasihat" },
+  { icon: LuFlower, label: "Cerita Hangat", href: "/cerita-hangat" },
   { icon: LuCode2, label: "Coding", href: "/coding" },
   { icon: LuGamepad2, label: "Gaming", href: "/gaming" },
   { icon: LuSmile, label: "Meme", href: "/meme" },

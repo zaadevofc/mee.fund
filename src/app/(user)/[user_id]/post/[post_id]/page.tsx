@@ -212,7 +212,7 @@ const PostDetailPage = () => {
               </div>
             ))}
           </div>
-          <FormInputCard />
+          <FormInputCard placeholder="Tulis komentar..." actionLabel="Kirim" />
           <div className="flex flex-col divide-y">
             {Array.from({ length: 6 }).map((x) => (
               <NestedC>

@@ -3,12 +3,10 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LuBadgeCheck,
-  LuChevronLeft
-} from "react-icons/lu";
+import { LuBadgeCheck, LuChevronLeft } from "react-icons/lu";
 import { POST_CATEGORY } from "~/consts";
 import Markdown from "./Markdown";
+import Image from "./Image";
 
 const Aside = () => {
   const { data: user }: any = useSession();
@@ -16,30 +14,36 @@ const Aside = () => {
 
   return (
     <>
-      <aside className="mt-3">
-        <div className="hide-scroll sticky top-0 mb-5 flex h-max max-h-screen w-full max-w-xs flex-col overflow-auto">
+      <aside className="mt-3 w-full max-w-[16rem]">
+        <div className="hide-scroll sticky top-0 mb-5 flex h-dvh w-full flex-col overflow-auto">
           <div className="flex flex-col gap-4">
             <Link
               href={`/@${user?.username}`}
               className={`flex w-full items-start gap-3 rounded-lg border ${path == `/@${user?.username}` && "border-primary-content"} bg-white p-3 active:scale-[.96]`}
             >
               <div className="flex-shrink-0">
-                <img
-                  className="w-10 rounded-full border"
-                  src="https://avatars.githubusercontent.com/u/93970726?v=4"
+                <Image
+                  className="size-10 rounded-full border"
+                  src={
+                    user?.picture ??
+                    "/assets/defaults/thumbnails/empty-picture.webp"
+                  }
                   width={100}
                   height={100}
+                  alt={`@${user?.username} profile picture`}
                 />
               </div>
-              <div className="flex w-fit flex-col">
+              <div className="flex w-full flex-col">
                 <div className="flex items-center gap-0.5">
-                  <strong>zaadevofc</strong>
-                  <LuBadgeCheck className="fill-green-400 stroke-white text-base" />
+                  <strong className="line-clamp-1">{user?.name}</strong>
+                  <LuBadgeCheck
+                    className={`${user?.is_verified && "!block"} hidden fill-green-400 stroke-white text-lg`}
+                  />
                 </div>
                 <span className="flex items-center gap-2 text-sm opacity-60">
                   <Markdown
-                    className={`leading-tight line-clamp-2`}
-                    text={`Ilmu bisa di cari tetapi ilmu tanpa adab _hanyalah_ **batu.**`}
+                    className={`line-clamp-2 leading-tight`}
+                    text={!!user?.bio ? user?.bio : "_Klik untuk tambah bio_"}
                   />
                 </span>
               </div>

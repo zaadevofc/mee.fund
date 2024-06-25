@@ -2,9 +2,9 @@
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import Brands from "./Brands";
-import { LuBell, LuLogOut, LuPlus, LuSearch, LuUser2 } from "react-icons/lu";
 import { usePathname } from "next/navigation";
+import { LuBell, LuPlus, LuSearch, LuUser2 } from "react-icons/lu";
+import Brands from "./Brands";
 
 const Navbar = () => {
   const { data: user }: any = useSession();
@@ -19,7 +19,7 @@ const Navbar = () => {
             <div
               className={`${user && "hidden"} ml-auto flex items-center gap-3`}
             >
-              <label htmlFor="buat_akun_modal" className="btn btn-sm">
+              <label htmlFor="masuk_akun_modal" className="btn btn-sm">
                 Masuk
               </label>
               <label
@@ -52,8 +52,8 @@ const Navbar = () => {
                 <LuBell />
               </Link>
               <Link
-                href={`/@${user?.name}`}
-                className={`btn btn-circle btn-sm ${path == `/@${user?.name}` && "btn-primary"} border border-base-300 text-xl`}
+                href={`/@${user?.username}`}
+                className={`btn btn-circle btn-sm ${path == `/@${user?.username}` && "btn-primary"} border border-base-300 text-xl`}
               >
                 <LuUser2 />
               </Link>

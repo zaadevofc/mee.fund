@@ -7,7 +7,7 @@
     @apply transition-all duration-100;
   }
   body {
-    @apply bg-white font-[Rubik] text-[15px] text-gray-800;
+    @apply bg-white text-[15px] text-gray-800;
   }
 
   .hide-scroll {

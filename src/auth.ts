@@ -4,7 +4,7 @@ import DiscordProvider from "next-auth/providers/discord";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import prisma from "~/prisma";
-import { generateUsername } from "./libs/tools";
+import { exclude, generateUsername } from "./libs/tools";
 
 export const NextAuthConfig: AuthOptions = {
   providers: [
@@ -34,7 +34,6 @@ export const NextAuthConfig: AuthOptions = {
     async signIn(props) {
       try {
         const provider = props.account?.provider;
-
         const data: Prisma.UserCreateInput = {
           name: props.user.name!,
           username: generateUsername(props.user.name!),
@@ -50,6 +49,7 @@ export const NextAuthConfig: AuthOptions = {
         })
         return true;
       } catch (error) {
+        console.log("🚀 ~ signIn ~ error:", error)
         return false;
       }
     },
@@ -61,6 +61,9 @@ export const NextAuthConfig: AuthOptions = {
     },
     async jwt(props) {
       try {
+        if (props.account) {
+          props.token.accessToken = props.account.access_token;
+        }
         const find = await prisma.user.findFirst({
           where: { email: props.token.email! },
           select: {
@@ -72,11 +75,13 @@ export const NextAuthConfig: AuthOptions = {
             lang: true,
             role: true,
             visibility: true,
+            is_verified: true,
+            is_blocked: true,
           }
         });
 
         if (!find) return {};
-        return { ...find };
+        return { ...props.token, ...find };
       } catch (e) {
         console.log(e);
         return {};

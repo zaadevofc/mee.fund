@@ -13,6 +13,8 @@ import Markdown from "~/components/Markdown";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { dayjs } from "~/libs/tools";
 import Image from "./Image";
+import ImageContainer from "./ImageContainer";
+import toast from "react-hot-toast";
 
 const actionPostLits = [
   {
@@ -92,33 +94,11 @@ const PostCard = (postPayload: PostPayloadType) => {
                 text={`_Lorem ipsum kolor bapak mu_ **Nostrud sit ex id** #eiusmod follow @kejaa guyss🤩 sint. In sint tempor labore eu do ea ipsum velit et aliquip cillum elit. Esse consectetur exercitation ea dolor nostrud mollit minim. Velit proident occaecat do commodo pariatur culpa ut adipisicing minim mollit non consectetur quis. Sit anim aliqua veniam magna eiusmod amet pariatur. Aute nulla ex Lorem nostrud magna laborum consequat incididunt velit eu elit labore. Irure nisi commodo anim ipsum tempor incididunt reprehenderit proident eu ut excepteur dolore nisi ipsum. Amet fugiat velit enim duis id. Non ea qui et excepteur aliqua sit.​`}
               />
             </Link>
-            <ScrollContainer
-              className={` ${
-                IMGL > 2
-                  ? "flex items-center"
-                  : IMGL > 1
-                    ? "grid grid-cols-2"
-                    : ""
-              } items-center gap-2 overflow-x-scroll`}
-            >
-              {Array.from({ length: IMGL }).map((x, i) => (
-                <PhotoView src={"/posts.jpg"}>
-                  <Image
-                    className={`max-h-[400px] w-fit cursor-grab rounded-lg border border-gray-300 active:cursor-grabbing ${
-                      IMGL > 2
-                        ? "object-cover [@media_(min-height:_401px)]:w-auto"
-                        : IMGL > 1
-                          ? "object-cover [@media_(min-height:_401px)]:w-full"
-                          : "object-contain [@media_(min-height:_401px)]:w-auto"
-                    } active:scale-[.96] [@media_(min-height:_401px)]:h-full`}
-                    src={"/posts.jpg"}
-                  />
-                </PhotoView>
-              ))}
-            </ScrollContainer>
+            <ImageContainer media={["/posts.jpg", "/posts.jpg"]} />
             <div className="flex items-center gap-5 text-lg">
               {actionPostLits.map((x, i) => (
                 <div
+                  onClick={() => toast.success("Hello World")}
                   className={`group relative flex items-center ${i > 0 ? "gap-1.5" : "gap-1"}`}
                 >
                   <div

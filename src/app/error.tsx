@@ -24,7 +24,7 @@ export default function Error({
         <h1 className="text-xl font-semibold">Terjadi {error.name} Sistem!</h1>
         <Markdown text={error.message} className="text-lg" />
         <p className="text-sm text-red-500">
-          Jika masalah ini terus terjadi, harap hubungi author pada kontak yang
+          Jika masalah ini terus terjadi, coba hubungi author pada kontak yang
           tertera!
         </p>
       </div>

@@ -22,7 +22,7 @@ const MetaMainPage = () => {
             Terbaru
           </h1>
         </div>
-        <FormInputCard />
+        <FormInputCard withCategory />
         {Array.from({ length: 10 }).map((x) => (
           <PostCard />
         ))}

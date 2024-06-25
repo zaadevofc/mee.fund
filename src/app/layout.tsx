@@ -1,9 +1,12 @@
+import { Rubik } from "next/font/google";
 import { METADATA } from "~/consts";
 import SessionWrapper from "./session";
 import "./globals.css";
 import "react-photo-view/dist/react-photo-view.css";
+import Script from "next/script";
 
 export const metadata = METADATA;
+const rubik = Rubik({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
@@ -42,28 +45,13 @@ export default function RootLayout({
         <meta name="theme-color" content="#ffffff" />
         <meta name="google-adsense-account" content="ca-pub-6374133597923635" />
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin={"anonymous"}
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Onest:wght@100;200;300;400;500;600;700;800;900;1000&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Rubik:wght@100;200;300;400;500;600;700;800;900;1000&display=swap"
-          rel="stylesheet"
-        />
-
-        <script
+        <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6374133597923635"
           crossOrigin="anonymous"
-        ></script>
+        ></Script>
       </head>
-      <body>
+      <body className={rubik.className}>
         <SessionWrapper>{children}</SessionWrapper>
       </body>
     </html>

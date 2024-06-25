@@ -37,4 +37,7 @@ next-env.d.ts
 
 .vercel
 .env
+.xata
+.xatarc
+
 prisma

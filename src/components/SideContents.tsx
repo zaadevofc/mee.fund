@@ -12,8 +12,8 @@ import { dayjs } from "~/libs/tools";
 const SideContents = () => {
   return (
     <>
-      <aside className="mt-3">
-        <div className="hide-scroll p-3s sticky top-0 flex h-dvh w-full max-w-[22rem] flex-col gap-3 overflow-auto pb-10">
+      <aside className="mt-3 w-full max-w-[21rem]">
+        <div className="hide-scroll p-3s sticky top-0 flex h-dvh w-full flex-col gap-3 overflow-auto pb-10">
           <div className="flex flex-col rounded-lg border bg-white py-4">
             <h1 className="px-4 text-lg font-bold">Yang ramai di bahas</h1>
             <div className="my-2 flex flex-col">

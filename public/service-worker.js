@@ -25,6 +25,10 @@ const cacheClone = async (e) => {
 
 const fetchEvent = () => {
   self.addEventListener("fetch", (e) => {
+    if (e.request.url.indexOf("/api/") !== -1) {
+      return false;
+    }
+
     e.respondWith(
       cacheClone(e)
         .catch(() => caches.match(e.request))

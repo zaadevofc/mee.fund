@@ -21,7 +21,7 @@ export default function NotFound() {
           className="text-lg"
         />
         <p className="text-sm text-red-500">
-          Jika masalah ini terus terjadi, harap hubungi author pada kontak yang
+          Jika masalah ini terus terjadi, coba hubungi author pada kontak yang
           tertera!
         </p>
       </div>
