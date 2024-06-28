@@ -1,31 +1,26 @@
 "use client";
 
+import { useState } from "react";
 import FormInputCard from "~/components/FormInputCard";
-import PostCard from "~/components/PostCard";
+import RenderPosts from "~/components/RenderPosts";
+import TabOptions from "~/components/TabOptions";
 import Wrapper from "~/components/Wrapper";
 
+const tabs = [
+  { label: "Untuk Kamu", value: "default" },
+  { label: "Terbaru", value: "newest" },
+];
+
 const MetaMainPage = () => {
+  const [isType, setType] = useState<any>("default");
+
   return (
     <>
       <Wrapper>
-        <div
-          role="tablist"
-          className="tabs-boxed tabs rounded-lg border bg-transparent"
-        >
-          <h1 role="tab" className="tab">
-            Mengikuti
-          </h1>
-          <h1 role="tab" className="tab font-semibold text-primary">
-            Untuk Kamu
-          </h1>
-          <h1 role="tab" className="tab">
-            Terbaru
-          </h1>
-        </div>
+        <TabOptions tabs={tabs} onTabsClick={(x) => setType(x)} />
         <FormInputCard withCategory />
-        {Array.from({ length: 10 }).map((x) => (
-          <PostCard />
-        ))}
+        {isType == "default" && <RenderPosts category="UMUM" />}
+        {isType == "newest" && <RenderPosts category="UMUM" options="newest" />}
       </Wrapper>
     </>
   );

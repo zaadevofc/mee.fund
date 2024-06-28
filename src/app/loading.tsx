@@ -11,7 +11,7 @@ const Loading = () => {
           <h1 className="whitespace-nowrap text-[13px] opacity-60 mt-5">
             &copy; {dayjs().format("YYYY")} MeeFund by{" "}
             <strong>
-              <Link href={"https://instagram.com/zaadevofc"} target="_blank">
+              <Link scroll={false}href={"https://instagram.com/zaadevofc"} target="_blank">
                 zaadevofc
               </Link>
             </strong>

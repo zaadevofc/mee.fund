@@ -14,10 +14,10 @@ import {
 } from "react-icons/lu";
 
 export const SEO = {
-  SITE_URL: "https://mee.fund/",
-  SITE_TITLE: "MeeFund - Cari hal seru sambil cari ilmu!",
+  SITE_URL: process.env.NODE_ENV === "development" ? 'http://localhost:3000/' : "https://mee.fund/",
+  SITE_TITLE: "MeeFund - Komunitas kreatif yang penuh inovasi dan hiburan terbaik mu!",
   SITE_DESCRIPTION:
-    "MeeFund media sosial edukasi yang seru dan asik. Kontribusi atau Cari hal seru sambil cari ilmu! Buat hiburan dan keseruan lainnya hanya di MeeFund!",
+    "Panggung buat ide-idemu yang paling gokil. Mulai dari proyek kreatif, inovasi, sampai hiburan seru, semua bisa dapat tempat di MeeFund. Jadi, tunggu apa lagi? Saatnya unjuk gigi!",
   SITE_AUTHORS: [
     { name: "zaadevofc", url: "https://zaadevofc.tech" },
     { name: "zaadevofc", url: "https://instagram.com/zaadevofc" },

@@ -4,7 +4,7 @@
 
 @layer utilities {
   * {
-    @apply transition-all duration-100;
+    @apply box-border transition-all duration-100;
   }
   body {
     @apply bg-white text-[15px] text-gray-800;
@@ -20,23 +20,26 @@
 }
 
 @layer components {
-  p > a {
+  .markdown a {
     @apply text-primary;
   }
-
-  p > img {
+  
+  .markdown img {
     @apply hidden;
   }
 
   textarea {
-    @apply !outline-none active:!outline-none !ring-0 border-none resize-none;
+    @apply resize-none border-none !outline-none !ring-0 active:!outline-none;
   }
 
-  input, .input, select {
-    @apply !outline-none active:!outline-none !ring-0;
+  input,
+  .input,
+  select {
+    @apply !outline-none !ring-0 active:!outline-none;
   }
 
-  img, Image {
+  img,
+  Image {
     @apply select-none;
   }
 
@@ -45,9 +48,9 @@
   }
 
   .btn {
-    @apply font-normal rounded-lg;
+    @apply rounded-lg font-normal;
   }
-  
+
   .tab-active {
     @apply !rounded-2xl;
   }
@@ -61,10 +64,14 @@
   }
 
   .textmark-indonesia {
-    @apply !text-transparent bg-clip-text bg-[linear-gradient(180deg,_#C8102E_50%,_#A0AEC0_50%)];
+    @apply bg-[linear-gradient(180deg,_#C8102E_50%,_#A0AEC0_50%)] bg-clip-text !text-transparent;
   }
-  
+
   .textmark-rainbow {
-    @apply !text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-rose-400 to-lime-400;
+    @apply bg-gradient-to-r from-sky-400 via-rose-400 to-lime-400 bg-clip-text !text-transparent;
+  }
+
+  .clean {
+    @apply !rounded-none !border-none !p-0;
   }
 }

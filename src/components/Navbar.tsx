@@ -33,25 +33,25 @@ const Navbar = () => {
             <div
               className={`${!user && "hidden"} ml-auto flex items-center gap-4`}
             >
-              <Link
+              <Link scroll={false}
                 href={"/"}
                 className={`btn btn-circle btn-sm border border-base-300 text-xl`}
               >
                 <LuPlus />
               </Link>
-              <Link
+              <Link scroll={false}
                 href={"/search"}
                 className={`btn btn-circle btn-sm ${path == `/search` && "btn-primary"} border border-base-300 text-xl`}
               >
                 <LuSearch />
               </Link>
-              <Link
+              <Link scroll={false}
                 href={"/activity"}
                 className={`btn btn-circle btn-sm ${path == `/activity` && "btn-primary"} border border-base-300 text-xl`}
               >
                 <LuBell />
               </Link>
-              <Link
+              <Link scroll={false}
                 href={`/@${user?.username}`}
                 className={`btn btn-circle btn-sm ${path == `/@${user?.username}` && "btn-primary"} border border-base-300 text-xl`}
               >

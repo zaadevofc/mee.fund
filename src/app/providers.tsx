@@ -21,12 +21,6 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
   splitbee.init();
   const { status } = useSession();
 
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/service-worker.js");
-    }
-  }, []);
-
   if (status == "loading") return <Loading />;
   return (
     <>

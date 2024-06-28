@@ -44,7 +44,6 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#2d89ef" />
         <meta name="theme-color" content="#ffffff" />
         <meta name="google-adsense-account" content="ca-pub-6374133597923635" />
-
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6374133597923635"

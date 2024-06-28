@@ -32,7 +32,7 @@ export default function NotFound() {
         <h1 className="mt-5 whitespace-nowrap text-[13px] opacity-60">
           &copy; {dayjs().format("YYYY")} MeeFund by{" "}
           <strong>
-            <Link href={"https://instagram.com/zaadevofc"} target="_blank">
+            <Link scroll={false}href={"https://instagram.com/zaadevofc"} target="_blank">
               zaadevofc
             </Link>
           </strong>

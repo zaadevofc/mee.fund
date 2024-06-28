@@ -41,6 +41,6 @@ const config: Config = {
       "sunset",
     ],
   },
-  plugins: [require("daisyui")],
+  plugins: [require("daisyui"), require('@tailwindcss/aspect-ratio')],
 };
 export default config;

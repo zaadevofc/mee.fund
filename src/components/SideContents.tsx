@@ -12,8 +12,8 @@ import { dayjs } from "~/libs/tools";
 const SideContents = () => {
   return (
     <>
-      <aside className="mt-3 w-full max-w-[21rem]">
-        <div className="hide-scroll p-3s sticky top-0 flex h-dvh w-full flex-col gap-3 overflow-auto pb-10">
+      <aside className="hide-scroll sticky top-3 mb-10 mt-3 hidden h-dvh w-full max-w-[17rem] flex-col gap-3 overflow-auto min-[860px]:flex lg:max-w-[20rem]">
+        <div className="flex flex-col gap-3">
           <div className="flex flex-col rounded-lg border bg-white py-4">
             <h1 className="px-4 text-lg font-bold">Yang ramai di bahas</h1>
             <div className="my-2 flex flex-col">
@@ -52,7 +52,7 @@ const SideContents = () => {
                 .slice(0, 6)
                 .map((x, i) => (
                   <div className="flex w-full items-center gap-3">
-                    <Link href={"/s"}>
+                    <Link scroll={false} href={"/s"}>
                       <img
                         className="h-fit w-8 rounded-md border"
                         src="https://avatars.githubusercontent.com/u/93970726?v=4"
@@ -61,7 +61,11 @@ const SideContents = () => {
                       />
                     </Link>
                     <div className="flex flex-col">
-                      <Link href={"/s"} className="flex items-center gap-0.5">
+                      <Link
+                        scroll={false}
+                        href={"/s"}
+                        className="flex items-center gap-0.5"
+                      >
                         <strong>zaadevofc</strong>
                         <LuBadgeCheck className="fill-green-400 stroke-white text-base" />
                       </Link>
@@ -81,7 +85,11 @@ const SideContents = () => {
                     </div>
                   </div>
                 ))}
-              <Link href={"/"} className="text-sm font-semibold text-primary">
+              <Link
+                scroll={false}
+                href={"/"}
+                className="text-sm font-semibold text-primary"
+              >
                 Lihat lainnya
               </Link>
             </div>
@@ -95,7 +103,7 @@ const SideContents = () => {
               Buat pertanyaan atau informasi yang bermanfaat bahkan meme untuk
               candaan dengan penuh tawa!
             </p>
-            <Link href={"/"} className="btn btn-primary btn-sm w-full">
+            <Link scroll={false}href={"/"} className="btn btn-primary btn-sm w-full">
               Buat Postingan
             </Link>
           </div> */}
@@ -109,7 +117,7 @@ const SideContents = () => {
               Ramaikan sosial media ini dengan memposting dan memberi informasi
               yang bermanfaat ataupun hiburan!!
             </p>
-            <Link href={"/"} className="btn btn-primary btn-sm w-full">
+            <Link scroll={false}href={"/"} className="btn btn-primary btn-sm w-full">
               Bagikan
             </Link>
           </div> */}
@@ -117,22 +125,26 @@ const SideContents = () => {
           <h1 className="mt-5 whitespace-nowrap text-[13px] opacity-60">
             &copy; {dayjs().format("YYYY")} MeeFund by{" "}
             <strong>
-              <Link href={"https://instagram.com/zaadevofc"} target="_blank">
+              <Link
+                scroll={false}
+                href={"https://instagram.com/zaadevofc"}
+                target="_blank"
+              >
                 zaadevofc
               </Link>
             </strong>
           </h1>
           <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs font-light opacity-60 [&>_a:hover]:underline">
-            <Link href={"/"} className="whitespace-nowrap">
+            <Link scroll={false} href={"/"} className="whitespace-nowrap">
               Terms of Service
             </Link>
-            <Link href={"/"} className="whitespace-nowrap">
+            <Link scroll={false} href={"/"} className="whitespace-nowrap">
               Privacy Policy
             </Link>
-            <Link href={"/"} className="whitespace-nowrap">
+            <Link scroll={false} href={"/"} className="whitespace-nowrap">
               Developers
             </Link>
-            <Link href={"/"} className="whitespace-nowrap">
+            <Link scroll={false} href={"/"} className="whitespace-nowrap">
               About
             </Link>
           </div>
