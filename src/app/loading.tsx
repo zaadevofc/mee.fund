@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import Link from "next/link";
-import Brands from "~/components/Brands";
+import Brands from "~/components/Services/Brands";
 
 const Loading = () => {
   return (

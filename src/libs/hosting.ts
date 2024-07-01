@@ -7,18 +7,14 @@ export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_KEY!,
 )
 
-export const uploadMedia = async (file: File, { type, alt, tags }: { type?: string; alt?: string; tags?: any }) => {
+export const uploadMedia = async (file: File, { tags }: { tags?: any }) => {
   return await uploadFile(file, {
     publicKey: process.env.NEXT_PUBLIC_HOSTING_KEY!,
     store: "auto",
-    source: 'publics',
     fileName: keygen.url(12),
-    integration: 'uploadcare',
     metadata: {
       part: "meefund.storage",
       url: "https://mee.fund",
-      type: type!,
-      alt: alt!,
       tags: tags
     },
   });

@@ -26,10 +26,11 @@ export const getUsernameFromParams = (username: string): string =>
 export const generateUsername = (text: string): string =>
   `${text.split(' ')[0]}${Math.random().toString(36).substr(2, 3)}`.toLowerCase()
 
-export const stringObj = JSON.stringify
+export const stringObj = (obj: unknown) => JSON.stringify(obj, null, 2)
+export const parseObj = (obj: string) => JSON.parse(obj)
 
-export const exclude = (obj: Record<string, any>, keys: string[]): Record<string, any> => {
-  const result: Record<string, any> = {}
+export const exclude = (obj: any, keys: string[]) => {
+  const result: any = {}
   for (const key in obj) {
     if (!keys.includes(key)) result[key] = obj[key]
   }
@@ -47,8 +48,17 @@ export const shuffleArray = <T>(array: T[]): T[] => {
   return array
 }
 
-export const compareArrays = <T>(array1: T[], array2: T[]): boolean =>
-  array1.length === array2.length && array1.every((value, index) => value === array2[index])
+export const compareArrays = (arr1: any[], arr2: any[]) => {
+  return arr1.every((e) => {
+    if (typeof e === 'string' && e.includes('|')) {
+      const opt = e.split('|').map(opt => opt.trim());
+      if (opt.every(opt => arr2.some((c) => String(c) === opt))) return true;
+      return opt.some(opt => arr2.some((c) => String(c) === opt));
+    } else {
+      return arr2.some((c) => String(e) === String(c));
+    }
+  });
+}
 
 export const extractTags = (tag: string, text: string): string[] => {
   const escapedTag = tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -69,7 +79,7 @@ export const signJWT = async (payload = {}, exp = 50): Promise<string | false> =
   }
 }
 
-export const verifyJWT = async (token: string): Promise<Record<string, any> | false> => {
+export const verifyJWT = async (token: string): Promise<{ [k: string]: unknown } | false> => {
   try {
     const result = await verify(token, process.env.NEXT_PUBLIC_JWT_TOKEN!, "HS512")
     return exclude(result, ['exp'])

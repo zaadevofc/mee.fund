@@ -1,6 +1,0 @@
-{
-  "databaseURL": "https://zaadevofc-uuq2nd.us-east-1.xata.sh/db/meefund",
-  "codegen": {
-    "output": "src/libs/xata.ts"
-  }
-}

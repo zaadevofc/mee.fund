@@ -1,16 +1,27 @@
-import React from "react";
-import MetaMainPage from "./meta";
-import { Metadata } from "next";
-import { SEO } from "~/consts";
+'use client';
 
-export const metadata: Metadata = {
-  title: `Beranda | ${SEO.SITE_TITLE}`,
-};
+import { useState } from 'react';
+import FormInputCard from '~/components/Layouts/SubmitCard';
+import RenderPosts from '~/components/Renders/RenderPosts';
+import TabOptions from '~/components/Layouts/HeaderTabs';
+import Wrapper from '~/components/Layouts/Wrapper';
+
+const tabs = [
+  { label: 'Untuk Kamu', value: 'default' },
+  { label: 'Terbaru', value: 'newest' },
+];
 
 const MainPage = () => {
+  const [isType, setType] = useState<any>('default');
+
   return (
     <>
-      <MetaMainPage />
+      <Wrapper>
+        <TabOptions tabs={tabs} onTabsClick={x => setType(x)} />
+        <FormInputCard inputMode="posts" />
+        {/* {isType == 'default' && <RenderPosts category="UMUM" />}
+        {isType == 'newest' && <RenderPosts category="UMUM" options="newest" />} */}
+      </Wrapper>
     </>
   );
 };

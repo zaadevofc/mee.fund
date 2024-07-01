@@ -1,7 +1,7 @@
 import { Rubik } from "next/font/google";
 import { METADATA } from "~/consts";
 import SessionWrapper from "./session";
-import "./globals.css";
+import "~/styles/globals.css";
 import "react-photo-view/dist/react-photo-view.css";
 import Script from "next/script";
 

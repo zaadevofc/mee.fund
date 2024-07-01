@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import {
+  LuAccessibility,
+  LuAward,
   LuBookMarked,
   LuCalendarHeart,
   LuCode2,
@@ -8,7 +10,9 @@ import {
   LuHome,
   LuHotel,
   LuMedal,
+  LuMonitorDot,
   LuPaintbrush,
+  LuShare2,
   LuSiren,
   LuSmile
 } from "react-icons/lu";
@@ -90,12 +94,12 @@ export const RAINBOW_TEXT = [
 export const POST_CATEGORY = [
   { icon: LuHome, label: "Beranda", href: "/" },
   { icon: LuBookMarked, label: "Pendidikan", href: "/pendidikan" },
-  { icon: LuSiren, label: "Fakta Menarik", href: "/fakta-menarik" },
-  { icon: LuCalendarHeart, label: "Nasihat", href: "/nasihat" },
-  { icon: LuFlower, label: "Cerita Hangat", href: "/cerita-hangat" },
-  { icon: LuCode2, label: "Coding", href: "/coding" },
-  { icon: LuGamepad2, label: "Gaming", href: "/gaming" },
+  { icon: LuMonitorDot, label: "Coding", href: "/coding" },
+  { icon: LuAward, label: "Pameran", href: "/pameran" },
+  { icon: LuShare2, label: "Sharing", href: "/sharing" },
+  { icon: LuAccessibility, label: "Tanya Sepuh", href: "/tanya-sepuh" },
   { icon: LuSmile, label: "Meme", href: "/meme" },
+  { icon: LuGamepad2, label: "Gaming", href: "/gaming" },
   { icon: LuPaintbrush, label: "Karya Seni", href: "/karya-seni" },
   { icon: LuMedal, label: "Info Lomba", href: "/info-lomba" },
   { icon: LuHotel, label: "Info Lowongan", href: "/info-lowongan" },

@@ -19,14 +19,40 @@ const nextConfig = {
     scrollRestoration: true,
   },
   images: {
-    formats: ["image/avif"],
+    formats: ['image/avif'],
     minimumCacheTTL: 999999,
     remotePatterns: [
-      { hostname: "avatars.githubusercontent.com" },
-      { hostname: "lh3.googleusercontent.com" },
-      { hostname: "cdn.discordapp.com" },
-      { hostname: "ucarecdn.com" },
+      { hostname: 'avatars.githubusercontent.com' },
+      { hostname: 'lh3.googleusercontent.com' },
+      { hostname: 'cdn.discordapp.com' },
+      { hostname: 'ucarecdn.com' },
     ],
+  },
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: 'https://mee.fund',
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET,POST',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value:
+              'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+          },
+        ],
+      },
+    ];
   },
 };
 
