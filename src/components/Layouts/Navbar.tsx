@@ -12,7 +12,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="flex w-full items-center border-b bg-white">
+      <nav className="fixed top-0 z-50 flex w-full items-center border-b bg-white">
         <div className="mx-auto flex w-full max-w-screen-xl flex-col max-xl:px-5 py-3">
           <div className="flex w-full items-center gap-10">
             <Brands />

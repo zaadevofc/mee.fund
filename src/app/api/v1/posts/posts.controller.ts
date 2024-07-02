@@ -24,7 +24,8 @@ app.get('/', async (c) => {
       }
     })
 
-    return c.json({ data: category == 'random' ? shuffleArray(posts!) : posts })
+    let random = { ...posts, posts: shuffleArray(posts?.posts!) }
+    return c.json({ data: category == 'random' ? random : posts })
   } catch (error: any) {
     return c.get('ParseError')(error)
   }

@@ -49,9 +49,12 @@ export const POST_BASIC_SCHEMA = {
 
 export const getManyPosts = async (props: getManyPostsType) => {
   try {
+    let limit = Number(props.limit || 10);
+    let offset = (Number(props.offset || 1) - 1) * limit
+
     let posts = await prisma.post.findMany({
-      take: Number(props.limit || 10),
-      skip: Number(props.offset || 0),
+      take: limit + 1,
+      skip: offset,
       orderBy: { created_at: 'desc' },
       select: {
         ...POST_BASIC_SCHEMA,
@@ -82,7 +85,10 @@ export const getManyPosts = async (props: getManyPostsType) => {
       comments: post.comments.filter((c: any) => c._count.likes >= 10)
     }));
 
-    return posts
+    const hasMore = posts.length > limit
+    const result = hasMore ? posts.slice(0, -1) : posts
+
+    return { posts: result, hasMore }
   } catch (e) {
     console.log("🚀 ~ getManyPosts ~ e:", e)
     MakeQueryError()
@@ -112,7 +118,7 @@ export const getPostDetail = async (props: getPostDetailType) => {
       }
     })
 
-    return post?.[0]
+    return post?.posts?.[0]
   } catch (e) {
     console.log("🚀 ~ getPostDetail ~ e:", e)
     MakeQueryError()

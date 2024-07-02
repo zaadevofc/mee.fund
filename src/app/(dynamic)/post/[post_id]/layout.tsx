@@ -6,9 +6,11 @@ import { dayjs, signJWT } from "~/libs/tools";
 export async function generateMetadata({ params }: any): Promise<Metadata> {
   const post = decodeURIComponent(params.post_id);
   const token = await signJWT({ ids: post }, 60);
-  const res = await fetchJson(
-    SEO.SITE_URL + BASE_URL_API.substring(1) + `/post/detail?token=${token}`,
-  );
+  // const res = await fetchJson(
+  //   SEO.SITE_URL + BASE_URL_API.substring(1) + `/post/detail?token=${token}`,
+  // );
+
+  const res = {} as any
 
   if (!res?.data) return {};
 

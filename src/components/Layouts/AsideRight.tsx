@@ -24,7 +24,7 @@ const AsideRight = () => {
 
   return (
     <>
-      <aside className="hide-scroll sticky top-5 mt-3 pb-10 hidden max-h-dvh w-full max-w-[17rem] flex-col gap-3 overflow-auto min-[860px]:flex lg:max-w-[20rem]">
+      <aside className="hide-scroll sticky top-16 pt-2 hidden max-h-[calc(100vh-4rem)] max-w-full flex-col gap-3 overflow-auto [@media_(min-width:860px)]:flex">
         <div className="flex flex-col gap-3">
           <div className="flex flex-col rounded-lg border bg-white pt-4">
             <h1 className="px-4 text-lg font-bold">Yang ramai di bahas</h1>
@@ -60,14 +60,9 @@ const AsideRight = () => {
                   <div className="flex flex-col gap-0.5">
                     <div className="flex items-center gap-0.5">
                       <strong>{x?.name}</strong>
-                      <LuBadgeCheck
-                        className={`${x?.is_verified && '!block'} hidden fill-green-400 stroke-white text-lg`}
-                      />
+                      <LuBadgeCheck className={`${x?.is_verified && '!block'} hidden fill-green-400 stroke-white text-lg`} />
                     </div>
-                    <Markdown
-                      className={`line-clamp-2 text-sm leading-tight opacity-60`}
-                      text={x?.bio || '@' + x?.username}
-                    />
+                    <Markdown className={`line-clamp-2 text-sm leading-tight opacity-60`} text={x?.bio || '@' + x?.username} />
                   </div>
                 </Link>
               ))}
@@ -79,9 +74,7 @@ const AsideRight = () => {
             </h1>
           </div>
           <div className="flex flex-col rounded-lg border bg-white">
-            <h1 className="break-words bg-[url('/svg/noises.svg')] p-4 text-xl font-black uppercase leading-tight -tracking-wide text-primary">
-              BAGIKAN MEEFUND KE TEMAN TEMAN MU!
-            </h1>
+            <h1 className="break-words bg-[url('/svg/noises.svg')] p-4 text-xl font-black uppercase leading-tight -tracking-wide text-primary">BAGIKAN MEEFUND KE TEMAN TEMAN MU!</h1>
           </div>
           <h1 className="mt-5 whitespace-nowrap text-[13px] opacity-60">
             &copy; {dayjs().format('YYYY')} MeeFund by{' '}

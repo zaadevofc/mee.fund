@@ -1,6 +1,8 @@
 import { Hono } from 'hono';
 import { bearerAuth } from 'hono/bearer-auth';
 import { csrf } from 'hono/csrf';
+import { cors } from 'hono/cors';
+import { etag } from 'hono/etag';
 import { prettyJSON } from 'hono/pretty-json';
 import { secureHeaders } from 'hono/secure-headers';
 import { handle } from 'hono/vercel';
@@ -10,6 +12,8 @@ import { CommentsController } from '../comments/comments.controller';
 import { PostsController } from '../posts/posts.controller';
 import { TagsController } from '../tags/tags.controller';
 import { UserController } from '../users/users.controller';
+import { MediaController } from '../media/media.controller';
+import { SEO } from '~/consts';
 
 const app = new Hono<{ Variables: any }>().basePath('/api/v1')
 const baseUrl = (c: any) => c.req.raw.nextUrl.origin + '/';
@@ -17,9 +21,18 @@ const baseUrl = (c: any) => c.req.raw.nextUrl.origin + '/';
 export const MakeError = (code: number, error: string, cause: string) => { throw Error(stringObj({ code, error, cause })) }
 export const MakeQueryError = () => MakeError(500, 'INTERNAL_SERVER_ERROR', 'Terjadi kesalahan query dari sistem.')
 
-app.use('*', secureHeaders({ xFrameOptions: true, xXssProtection: true, }))
-app.use(csrf({ origin: ['mee.fund'], }))
+app.use('*', etag())
+app.use('*', secureHeaders())
+// app.use(csrf({ origin: [SEO.SITE_URL] }))
 app.use(prettyJSON({ space: 2 }))
+
+app.use('*', cors({
+  origin: [SEO.SITE_URL],
+  allowMethods: ['GET', 'POST'],
+  allowHeaders: ['Authorization', 'Content-Type'],
+  maxAge: 600,
+  credentials: true,
+}))
 
 app.use('*',
   bearerAuth({
@@ -31,10 +44,12 @@ app.use('*',
     },
   }),
   async (c, next) => {
-    const queries = c.req.query()
     const method = c.req.method;
-    const bodies = method == 'POST' && await c.req.json()
+    const queries = c.req.query()
+    const bodies = (method == 'POST' && c.req.path.match('/upload')) ? await c.req.parseBody() : (method == 'POST' && !c.req.path.match('/upload')) ? await c.req.json() : ''
+    // console.log("🚀 ~ bodies:", bodies)
 
+    console.log("🚀 ~ token:", method)
     if (method == 'GET' && !queries.token) return c.json({ error: 'REQUIRED_TOKEN' }, 403)
     if (method == 'POST' && !bodies.token) return c.json({ error: 'REQUIRED_TOKEN' }, 403)
 
@@ -67,6 +82,7 @@ app.route('/posts', PostsController)
 app.route('/comments', CommentsController)
 app.route('/tags', TagsController)
 app.route('/actions', ActionsController)
+app.route('/media', MediaController)
 
 export const GET = handle(app)
 export const POST = handle(app)

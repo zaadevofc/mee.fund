@@ -6,7 +6,7 @@ const HeaderButton = ({ label }: Partial<{ label: string }>) => {
 
   return (
     <>
-      <div className="flex items-center gap-4 !p-3">
+      <div className="flex items-center gap-4 !pb-3">
         <h1 onClick={() => router.back()} className="btn !btn-xs">
           <LuArrowLeft />
         </h1>

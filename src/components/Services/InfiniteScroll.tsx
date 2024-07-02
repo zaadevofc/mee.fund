@@ -1,38 +1,20 @@
-import { Suspense, useEffect, useMemo, useState } from "react";
-import { default as InfiniteScrollWrapper } from "react-infinite-scroll-component";
+import { Suspense, useMemo } from 'react';
+import { default as InfiniteScrollWrapper } from 'react-infinite-scroll-component';
+import ChildLoading from './ChildLoading';
 
 type InfiniteScrollType = {
   children: any;
-  incomingData: Array<any>;
+  hasMore: boolean;
+  items: Array<any>;
   loadMore: () => void;
 };
 
 const InfiniteScroll = (props: InfiniteScrollType) => {
-  const [isItemData, setItemData] = useState<any>([]);
-
-  function removeDuplicates(array: any) {
-    const seen = new Set();
-    return array.filter((obj: any) => {
-      const id = obj.ids;
-      if (!seen.has(id)) {
-        seen.add(id);
-        return true;
-      }
-      return false;
-    });
-  }
-
-  useEffect(() => {
-    setItemData((x: Array<any>) =>
-      removeDuplicates([...x, ...(props?.incomingData || [])]),
-    );
-  }, [props?.incomingData]);
-
   const RenderData = useMemo(
     () =>
-      isItemData.map((x: any, i: any) => (
+      props.items?.map((x: any, i: any) => (
         <Suspense
-          key={"meta-" + i + x?.ids}
+          key={'meta-' + i + x?.ids}
           fallback={
             <div className="flex p-4">
               <div className="loading m-auto"></div>
@@ -42,25 +24,21 @@ const InfiniteScroll = (props: InfiniteScrollType) => {
           {props.children(x, i)}
         </Suspense>
       )),
-    [isItemData],
+    [props.items]
   );
 
   return (
     <>
       <InfiniteScrollWrapper
-        dataLength={isItemData.length}
+        dataLength={props.items?.length}
         next={props.loadMore}
-        hasMore={(props.incomingData?.length || 0) >= 5}
+        hasMore={props.hasMore}
         endMessage={
           <div className="flex p-4">
             <div className="m-auto">Konten sudah habis.</div>
           </div>
         }
-        loader={
-          <div className="flex p-4">
-            <div className="loading m-auto"></div>
-          </div>
-        }
+        loader={<ChildLoading />}
         className="flex flex-col gap-3 divide-y"
       >
         {RenderData}

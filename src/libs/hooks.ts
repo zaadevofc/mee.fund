@@ -11,7 +11,7 @@ const SecretKey = { secret: process.env.NEXT_PUBLIC_APIKEY! }
 export const fetchJson = async (uri: string) => {
   const auth = await signJWT(SecretKey, 180);
   return await fetch(uri, {
-    headers: { 'Authorization': `Bearer ${auth}` }
+    headers: { 'Authorization': `Bearer ${auth}` },
   }).then((x) => x.json());
 }
 
@@ -21,6 +21,21 @@ export const postJson = async (uri: string, data: unknown) => {
     body: JSON.stringify(data),
     method: "POST",
     headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${auth}` },
+  }).then((x) => x.json());
+}
+
+export const postMedia = async (file: File, bucket: string) => {
+  const auth = await signJWT(SecretKey, 180);
+
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('bucket', bucket)
+  formData.append('token', auth.toString())
+
+  return await fetch(BASE_URL_API + '/media/upload', {
+    body: formData,
+    method: "POST",
+    headers: { 'Authorization': `Bearer ${auth}` },
   }).then((x) => x.json());
 }
 

@@ -1,8 +1,8 @@
 'use client';
 
-import Aside from '~/components/Layouts/AsideLeft';
+import AsideLeft from '~/components/Layouts/AsideLeft';
+import AsideRight from '~/components/Layouts/AsideRight';
 import Navbar from '~/components/Layouts/Navbar';
-import SideContents from '~/components/Layouts/AsideRight';
 import BackHeaderButton from './HeaderButton';
 
 type WrapperType = {
@@ -18,19 +18,12 @@ type WrapperType = {
 const Wrapper = (props: WrapperType) => {
   return (
     <>
-      <Navbar />
-      <div className="mx-auto flex h-dvh w-full max-w-screen-xl flex-col">
-        <div className="flex h-dvh w-full justify-center gap-2 max-[1324px]:px-5 max-[545px]:px-0 min-[860px]:gap-6">
-          <Aside />
-          <div className="flex w-full max-w-full flex-col divide-y pb-28 min-[545px]:border-x">
+      <main className="flex h-dvh flex-col">
+        <Navbar />
+        <div className="mx-auto flex w-full max-w-screen-xl flex-grow justify-center [@media_(max-width:1324px)]:px-5 [@media_(max-width:545px)]:px-0 [@media_(min-width:860px)]:gap-6">
+          <AsideLeft />
+          <div className="hide-scroll mb-6 mt-[4.5rem] flex w-full max-w-[37rem] flex-col overflow-y-auto">
             {props.headerBackButton && <BackHeaderButton label={props.headerBackLabel} />}
-            {props.loading ? (
-              <div className="flex p-4">
-                <div className="loading m-auto"></div>
-              </div>
-            ) : (
-              !props.hideChild && props.children
-            )}
             {props.childLoading && (
               <div className="flex p-4">
                 <div className="loading m-auto"></div>
@@ -41,10 +34,17 @@ const Wrapper = (props: WrapperType) => {
                 <div className="m-auto">{props.childAlert}</div>
               </div>
             )}
+            {props.loading ? (
+              <div className="flex p-4">
+                <div className="loading m-auto"></div>
+              </div>
+            ) : (
+              !props.hideChild && props.children
+            )}
           </div>
-          <SideContents />
+          <AsideRight />
         </div>
-      </div>
+      </main>
     </>
   );
 };

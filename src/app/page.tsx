@@ -5,6 +5,7 @@ import FormInputCard from '~/components/Layouts/SubmitCard';
 import RenderPosts from '~/components/Renders/RenderPosts';
 import TabOptions from '~/components/Layouts/HeaderTabs';
 import Wrapper from '~/components/Layouts/Wrapper';
+import PostsCard from '~/components/Layouts/PostsCard';
 
 const tabs = [
   { label: 'Untuk Kamu', value: 'default' },
@@ -17,10 +18,15 @@ const MainPage = () => {
   return (
     <>
       <Wrapper>
-        <TabOptions tabs={tabs} onTabsClick={x => setType(x)} />
-        <FormInputCard inputMode="posts" />
+        {/* <TabOptions tabs={tabs} onTabsClick={x => setType(x)} />
+        <FormInputCard inputMode="posts" /> */}
         {/* {isType == 'default' && <RenderPosts category="UMUM" />}
         {isType == 'newest' && <RenderPosts category="UMUM" options="newest" />} */}
+        <div className="flex flex-col gap-3">
+          {Array.from({ length: 5 }, (_, i) => (
+            <PostsCard showSideOutline showHighlight />
+          ))}
+        </div>
       </Wrapper>
     </>
   );

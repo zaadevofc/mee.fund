@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  * {
+    @apply box-border transition-all duration-100;
+  }
+  body {
+    @apply bg-white text-[15px] text-gray-800 [@media_(max-width:412px)]:text-[14.5px];
+  }
+
+  .hide-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scroll::-webkit-scrollbar {
+    @apply hidden;
+  }
+}
+
+@layer components {
+  .markdown a {
+    @apply text-primary;
+  }
+
+  .markdown img {
+    @apply hidden;
+  }
+
+  textarea {
+    @apply resize-none border-none !outline-none !ring-0 active:!outline-none;
+  }
+
+  input,
+  .input,
+  select {
+    @apply !outline-none !ring-0 active:!outline-none;
+  }
+
+  img,
+  Image {
+    @apply select-none;
+  }
+
+  .rounded-lg {
+    @apply !rounded-[.7rem];
+  }
+
+  .btn {
+    @apply btn-sm rounded-lg font-normal [@media_(max-width:412px)]:!btn-xs [@media_(max-width:412px)]:!px-3 [@media_(max-width:412px)]:!text-[15px];
+  }
+
+  .text-shade {
+    @apply text-gray-500;
+  }
+
+  .text-shade-0 {
+    @apply text-gray-400;
+  }
+
+  .tab-active {
+    @apply !rounded-2xl;
+  }
+
+  .modal {
+    @apply modal-bottom [@media_(min-width:450px)]:modal-middle;
+
+    .modal-box {
+      @apply border;
+    }
+  }
+
+  .textmark-indonesia {
+    @apply bg-[linear-gradient(180deg,_#C8102E_50%,_#A0AEC0_50%)] bg-clip-text !text-transparent;
+  }
+
+  .textmark-rainbow {
+    @apply bg-gradient-to-r from-sky-400 via-rose-400 to-lime-400 bg-clip-text !text-transparent;
+  }
+
+  .clean {
+    @apply !rounded-none !border-none !p-0;
+  }
+}

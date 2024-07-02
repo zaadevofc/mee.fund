@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { useSession } from 'next-auth/react';
-import { lazy, useContext, useEffect, useState } from 'react';
+import { lazy, useContext, useCallback, useMemo, useState, useRef } from 'react';
 import { SystemContext } from '~/app/providers';
 import { FetchPostsType } from '~/libs/hooks';
 import InfiniteScroll from '../Services/InfiniteScroll';
@@ -13,76 +13,81 @@ type RenderPostsType = {
   username?: string;
 };
 
-const RenderPosts = (props: RenderPostsType) => {
-  const { FetchPosts, reqRefecth, setReqRefecth } = useContext(SystemContext);
-  const [isOffset, setOffset] = useState(0);
-  const { data: user }: any = useSession();
+const RenderPosts: React.FC<RenderPostsType> = ({ username = '' }) => {
+  const { FetchPosts } = useContext(SystemContext);
+  const [offset, setOffset] = useState(0);
+  const postsRef = useRef<Map<string, any>>(new Map());
+  const orderRef = useRef<string[]>([]);
 
-  const fetchPosts: any = FetchPosts({
-    category: props.category ?? 'UMUM',
+  const { data: user }: any = useSession();
+  const { data, isLoading, refetch }: any = FetchPosts({
     type: 'random',
-    limit: 99999999,
-    offset: isOffset,
-    username: props.username ?? '',
+    limit: 10,
+    offset,
+    request_id: user?.id,
+    username,
   });
 
-  console.log({ posts: fetchPosts.data?.data });
+  const updatePosts = useCallback((newPosts: any[]) => {
+    newPosts.forEach(post => {
+      if (!postsRef.current.has(post?.id)) {
+        orderRef.current.push(post?.id);
+      }
+      postsRef.current.set(post?.id, post);
+    });
+  }, []);
 
-  useEffect(() => {
-    if (reqRefecth == 'post') {
-      refetchData();
-      setReqRefecth!('-');
+  useMemo(() => {
+    if (data?.data?.posts) {
+      updatePosts(data.data.posts);
     }
-    refetchData();
-  }, [props.category, props.options, reqRefecth]);
+  }, [data, updatePosts]);
 
-  const refetchData = async () => {
-    // await setOffset(x => x + fetchPosts.data?.data.length);
-    await fetchPosts.refetch();
-  };
+  const items = useMemo(() => orderRef.current.map(id => postsRef.current.get(id)).filter(Boolean), [data]);
 
-  if (fetchPosts.isLoading)
-    return (
-      <div className="flex p-4">
-        <div className="loading m-auto"></div>
-      </div>
-    );
+  const fetchData = useCallback(async () => {
+    setOffset(prev => prev + 10);
+    await refetch();
+  }, [refetch]);
+
+  if (isLoading && items.length === 0) {
+    return <div className="loading m-auto" />;
+  }
 
   return (
-    <>
-      <InfiniteScroll loadMore={refetchData} incomingData={fetchPosts.data?.data}>
-        {(x: any, i: any) => (
-          <PostCard
-            asComment
-            payload={{
-              post_id: x?.id,
-              ids: x?.ids,
-              name: x?.user.name,
-              username: x?.user.username,
-              picture: x?.user.picture,
-              is_verified: x?.user.is_verified,
-              category: x?.category,
-              content: x?.content,
-              media: x?.media.map((x: any) => x?.url),
-              hasLike: x?.likes.some((x: any) => x?.user?.id == user?.id),
-              hasRepost: x?.reposts.some((x: any) => x?.user?.id == user?.id),
-              hasBookMark: x?.bookmarks.some((x: any) => x?.user?.id == user?.id),
-              likes: x?._count.likes,
-              comments: x?._count.comments,
-              reposts: x?._count.reposts,
-              bookmarks: x?._count.bookmarks,
-              created_at: x?.created_at,
-              comment_content: x?.comments[0]?.content,
-              comment_name: x?.comments[0]?.user?.name,
-              comment_picture: x?.comments[0]?.user?.picture,
-              comment_username: x?.comments[0]?.user?.username,
-              comment_is_verified: x?.comments[0]?.user?.is_verified,
-              comment_created_at: x?.comments[0]?.created_at,
-            }}
-          />
-        )}
-      </InfiniteScroll>
-    </>
+    <InfiniteScroll items={items} hasMore={data?.data?.hasMore ?? false} loadMore={fetchData}>
+      {(post: any) => (
+        <PostCard
+          key={post?.id}
+          asComment
+          payload={{
+            post_id: post?.id,
+            ids: post?.ids,
+            name: post?.user.name,
+            username: post?.user.username,
+            picture: post?.user.picture,
+            is_verified: post?.user.is_verified,
+            category: post?.category,
+            content: post?.content,
+            media: post?.media.map(({ url, mimetype }: any) => ({ src: url, type: mimetype })),
+            hasLike: post?.likes.length > 0,
+            hasRepost: post?.reposts.length > 0,
+            hasBookMark: post?.bookmarks.length > 0,
+            likes: post?._count.likes,
+            comments: post?._count.comments,
+            reposts: post?._count.reposts,
+            bookmarks: post?._count.bookmarks,
+            created_at: post?.created_at,
+            comment_content: post?.comments[0]?.content,
+            comment_name: post?.comments[0]?.user?.name,
+            comment_picture: post?.comments[0]?.user?.picture,
+            comment_username: post?.comments[0]?.user?.username,
+            comment_is_verified: post?.comments[0]?.user?.is_verified,
+            comment_created_at: post?.comments[0]?.created_at,
+          }}
+        />
+      )}
+    </InfiniteScroll>
   );
 };
 

@@ -26,6 +26,8 @@ const nextConfig = {
       { hostname: 'lh3.googleusercontent.com' },
       { hostname: 'cdn.discordapp.com' },
       { hostname: 'ucarecdn.com' },
+      { hostname: 'pchzoarnvyxkimkkfxcc.supabase.co' },
+      { hostname: 'yrmnzileroexrdtkcyvd.supabase.co' },
     ],
   },
   async headers() {
@@ -47,8 +49,7 @@ const nextConfig = {
           },
           {
             key: 'Access-Control-Allow-Headers',
-            value:
-              'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+            value: 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
           },
         ],
       },

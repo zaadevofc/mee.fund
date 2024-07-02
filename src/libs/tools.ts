@@ -27,7 +27,8 @@ export const generateUsername = (text: string): string =>
   `${text.split(' ')[0]}${Math.random().toString(36).substr(2, 3)}`.toLowerCase()
 
 export const stringObj = (obj: unknown) => JSON.stringify(obj, null, 2)
-export const parseObj = (obj: string) => JSON.parse(obj)
+export const parseObj = (obj: string) => JSON.parse(stringObj(JSON.parse(obj)))
+export const getRandom = (items: Array<any>) => items[~~(items.length * Math.random())];
 
 export const exclude = (obj: any, keys: string[]) => {
   const result: any = {}
