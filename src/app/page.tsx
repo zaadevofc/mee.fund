@@ -1,32 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import FormInputCard from '~/components/Layouts/SubmitCard';
-import RenderPosts from '~/components/Renders/RenderPosts';
-import TabOptions from '~/components/Layouts/HeaderTabs';
+import dynamic from 'next/dynamic';
 import Wrapper from '~/components/Layouts/Wrapper';
-import PostsCard from '~/components/Layouts/PostsCard';
 
-const tabs = [
-  { label: 'Untuk Kamu', value: 'default' },
-  { label: 'Terbaru', value: 'newest' },
-];
+const RenderPosts = dynamic(() => import('~/components/Renders/RenderPosts'));
 
 const MainPage = () => {
-  const [isType, setType] = useState<any>('default');
-
   return (
     <>
       <Wrapper>
-        {/* <TabOptions tabs={tabs} onTabsClick={x => setType(x)} />
-        <FormInputCard inputMode="posts" /> */}
-        {/* {isType == 'default' && <RenderPosts category="UMUM" />}
-        {isType == 'newest' && <RenderPosts category="UMUM" options="newest" />} */}
-        <div className="flex flex-col gap-3">
-          {Array.from({ length: 5 }, (_, i) => (
-            <PostsCard showSideOutline showHighlight />
-          ))}
-        </div>
+        <RenderPosts />
       </Wrapper>
     </>
   );

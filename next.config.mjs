@@ -1,23 +1,26 @@
 import withPWAInit from "@ducanh2912/next-pwa";
 
 const withPWA = withPWAInit({
-  dest: "public",
+  dest: 'public',
   cacheOnFrontEndNav: true,
   aggressiveFrontEndNavCaching: true,
   reloadOnOnline: true,
   register: true,
-  disable: process.env.NODE_ENV === "development",
-  sw: "service-worker.js",
+  disable: process.env.NODE_ENV === 'development',
+  sw: 'service-worker.js',
   workboxOptions: {
     disableDevLogs: true,
+    skipWaiting: true,
+  },
+  fallbacks: {
+    document: '/~offline',
+    image: "/assets/defaults/thumbnails/offline.jpg",
+    video: "/assets/defaults/thumbnails/offline.mp4",
   },
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    scrollRestoration: true,
-  },
   images: {
     formats: ['image/avif'],
     minimumCacheTTL: 999999,

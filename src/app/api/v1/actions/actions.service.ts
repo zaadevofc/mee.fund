@@ -1,5 +1,5 @@
 import prisma from "~/prisma";
-import { MakeError, MakeQueryError } from "../[[...route]]/route";
+import { MakeQueryError } from "../[[...route]]/route";
 
 export type makeActionsType = ({
   type: 'posts';
@@ -40,9 +40,9 @@ export const makeActions = async (props: makeActionsType) => {
       if (props.type === 'comments') {
         check = await txKey.findUnique({
           where: {
-            user_id_post_id: {
+            user_id_comment_id: {
               user_id: props.user_id,
-              post_id: props.comment_id
+              comment_id: props.comment_id
             }
           }
         });

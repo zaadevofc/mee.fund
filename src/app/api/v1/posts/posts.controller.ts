@@ -8,10 +8,11 @@ const app = new Hono<{ Variables: any }>()
 
 app.get('/', async (c) => {
   try {
-    const check = c.get('validate')(['limit', 'offset', 'username | request_id', 'category | type'])
+    const check = c.get('validate')(['limit', 'offset', 'username | request_id | category | type'])
     if (check) return check
 
     const { limit, offset, username, request_id, category, type } = c.get('payload');
+
     const posts = await getManyPosts({
       limit, offset, request_id, options: {
         where: {
@@ -24,8 +25,8 @@ app.get('/', async (c) => {
       }
     })
 
-    let random = { ...posts, posts: shuffleArray(posts?.posts!) }
-    return c.json({ data: category == 'random' ? random : posts })
+    let random = type == 'random' && ({ ...posts, posts: shuffleArray(posts?.posts!) })
+    return c.json({ data: random || posts })
   } catch (error: any) {
     return c.get('ParseError')(error)
   }

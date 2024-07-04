@@ -9,7 +9,7 @@ DayJS.extend(DayJSCalendar)
 DayJS.extend(DayJSUpdateLocale)
 DayJS.updateLocale('id', {
   calendar: {
-    lastDay: '[kemarin] HH:mm',
+    lastDay: '[kemarin]',
     sameDay: 'HH:mm',
     nextDay: '[besok] HH:mm',
     lastWeek: 'DD MMM, HH:mm',

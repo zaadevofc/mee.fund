@@ -9,17 +9,19 @@ import { useSession } from 'next-auth/react';
 import NextTopLoader from 'nextjs-toploader';
 import React, { createContext, useState } from 'react';
 import { PhotoProvider } from 'react-photo-view';
-import ModalsStore from '~/components/Layouts/ModalStore';
 import { CONTEXT_DATA } from '~/libs/hooks';
 import Loading from './loading';
-import Toaster from '~/components/Services/Toaster';
 
 const queryClient = new QueryClient();
 export const SystemContext = createContext(CONTEXT_DATA());
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
+  const [makePlaceholder, setMakePlaceholder] = useState<any>();
+  const [initSubmitType, setInitSubmitType] = useState<any>();
+  const [initTempPosts, setInitTempPosts] = useState<any>();
+  const [initTempComments, setInitTempComments] = useState<any>();
+
   const { status } = useSession();
-  const [reqRefecth, setReqRefecth] = useState<any>('');
   splitbee.init();
 
   if (status == 'loading') return <Loading />;
@@ -29,12 +31,23 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
       <GoogleAnalytics gaId="G-W9E3FW4JKX" />
       <Analytics />
       <SpeedInsights />
-      <SystemContext.Provider value={{ ...CONTEXT_DATA({ reqRefecth, setReqRefecth }) }}>
+      <SystemContext.Provider
+        value={{
+          ...CONTEXT_DATA({
+            makePlaceholder,
+            setMakePlaceholder,
+            initTempPosts,
+            setInitTempPosts,
+            initSubmitType,
+            setInitSubmitType,
+            initTempComments,
+            setInitTempComments,
+          }),
+        }}
+      >
         <QueryClientProvider client={queryClient}>
           <PhotoProvider>
             <main>{children}</main>
-            <Toaster />
-            <ModalsStore />
           </PhotoProvider>
         </QueryClientProvider>
       </SystemContext.Provider>

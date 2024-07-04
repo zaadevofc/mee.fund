@@ -41,3 +41,10 @@ next-env.d.ts
 .xatarc
 
 prisma
+
+# next-pwa
+**/public/workbox**
+**/public/sw**
+**/public/worker**
+**/public/fallback**
+**/public/precache**

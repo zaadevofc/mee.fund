@@ -24,7 +24,7 @@ const Markdown = ({ text, className }: any) => {
   );
 
   txt = txt.replace(/#(\w+)/gi, `<a href='/tags/$1'>‎#$1</a>`);
-  txt = txt.replace(/@(\w+)/gi, `<a href='/@$1' class='font-medium'>@$1</a>`);
+  txt = txt.replace(/@(\w+)/gi, `<a href='/@$1' className='font-bold'>@$1</a>`);
 
   return (
     <div

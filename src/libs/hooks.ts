@@ -1,23 +1,26 @@
 import { Prisma } from '@prisma/client';
 import { QueryFunction, UndefinedInitialDataOptions, UseMutationOptions, useMutation, useQuery } from "@tanstack/react-query";
 import { exclude, signJWT } from "./tools";
+import useSWR from 'swr';
 import { getManyUsersType, getUserProfileType } from '~/app/api/v1/users/users.service';
-import { createNewPostType, getManyPostsType } from '~/app/api/v1/posts/posts.service';
-import { createNewCommentType } from '~/app/api/v1/comments/comments.service';
+import { createNewPostType, getManyPostsType, getPostDetailType } from '~/app/api/v1/posts/posts.service';
+import { createNewCommentType, getManyCommentsType } from '~/app/api/v1/comments/comments.service';
+import { makeActionsType } from '~/app/api/v1/actions/actions.service';
+import { cache } from 'react';
 
 export const BASE_URL_API = '/api/v1'
 const SecretKey = { secret: process.env.NEXT_PUBLIC_APIKEY! }
 
-export const fetchJson = async (uri: string) => {
+export const fetchJson = async (url: string) => {
   const auth = await signJWT(SecretKey, 180);
-  return await fetch(uri, {
+  return await fetch(url, {
     headers: { 'Authorization': `Bearer ${auth}` },
   }).then((x) => x.json());
 }
 
-export const postJson = async (uri: string, data: unknown) => {
+export const postJson = async (url: string, data: unknown) => {
   const auth = await signJWT(SecretKey, 180);
-  return await fetch(uri, {
+  return await fetch(url, {
     body: JSON.stringify(data),
     method: "POST",
     headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${auth}` },
@@ -44,8 +47,8 @@ export const useQueryFetch = (fn: QueryFunction, key: string[], opts?: Partial<U
     queryKey: key,
     queryFn: fn,
     refetchInterval: 30000,
-    refetchOnReconnect: true,
     refetchIntervalInBackground: true,
+    // refetchOnReconnect: true,
     // refetchOnWindowFocus: true,
     // gcTime: Infinity,
     ...opts,
@@ -103,9 +106,15 @@ type CommentLikeActionsType = {
   comment_id?: string
 }
 
-type CONTEXT_DATAType = {
-  reqRefecth: "post" | "comment" | "reply" | "-";
-  setReqRefecth: (data: "post" | "reply" | "comment" | "-") => void;
+export type CONTEXT_DATAType = {
+  makePlaceholder: any
+  setMakePlaceholder: (data: any) => any
+  initTempPosts: any
+  setInitTempPosts: (data: any) => any
+  initTempComments: any
+  setInitTempComments: (data: any) => any
+  initSubmitType: { type: 'posts' | 'comments', post_id?: string; parent_id?: string }
+  setInitSubmitType: (data: CONTEXT_DATAType['initSubmitType']) => any
 }
 
 export const CONTEXT_DATA = (props?: CONTEXT_DATAType) => {
@@ -117,14 +126,14 @@ export const CONTEXT_DATA = (props?: CONTEXT_DATAType) => {
     FetchUserProfile: (props: getUserProfileType, status?: 'on' | 'off') => useQueryFetch(
       async () => {
         const token = await signJWT(props, 60)
-        return await fetchJson(BASE_URL_API + `/users/profile?token=${token}`)
+        return cache(async () => await fetchJson(BASE_URL_API + `/users/profile?token=${token}`))()
       },
       ['users/profile/' + Object.values(props).join('/')], { enabled: (status ?? 'on') == 'on' }
     ),
     FetchUserSuggestions: (props: getManyUsersType, status?: 'on' | 'off') => useQueryFetch(
       async () => {
         const token = await signJWT(props, 60)
-        return await fetchJson(BASE_URL_API + `/users/suggestions?token=${token}`)
+        return cache(async () => await fetchJson(BASE_URL_API + `/users/suggestions?token=${token}`))()
       },
       ['users/suggestions'], { enabled: (status ?? 'on') == 'on' }
     ),
@@ -140,16 +149,23 @@ export const CONTEXT_DATA = (props?: CONTEXT_DATAType) => {
     FetchPosts: (props: getManyPostsType, status?: 'on' | 'off') => useQueryFetch(
       async () => {
         const token = await signJWT(props, 60)
-        return await fetchJson(BASE_URL_API + `/posts?token=${token}`)
+        return cache(async () => await fetchJson(BASE_URL_API + `/posts?token=${token}`))()
       },
       ['posts/' + Object.values(props).join('/')], { enabled: (status ?? 'on') == 'on' }
     ),
-    FetchDetailPost: (props: FetchDetailPostType, status?: 'on' | 'off') => useQueryFetch(
+    FetchCommentsPost: (props: getManyCommentsType, status?: 'on' | 'off') => useQueryFetch(
       async () => {
         const token = await signJWT(props, 60)
-        return await fetchJson(BASE_URL_API + `/post/detail?token=${token}`)
+        return cache(async () => await fetchJson(BASE_URL_API + `/posts/comments?token=${token}`))()
       },
-      ['post/detail/' + props.ids], { enabled: (status ?? 'on') == 'on' }
+      ['posts/comments/' + Object.values(props).join('/')], { enabled: (status ?? 'on') == 'on' }
+    ),
+    FetchDetailPost: (props: getPostDetailType, status?: 'on' | 'off') => useQueryFetch(
+      async () => {
+        const token = await signJWT(props, 60)
+        return cache(async () => await fetchJson(BASE_URL_API + `/posts/detail?token=${token}`))()
+      },
+      ['posts/detail/' + Object.values(props).join('/')], { enabled: (status ?? 'on') == 'on' }
     ),
     PostLikeActions: () => useMutationFetch<PostLikeActionsType>(
       async (data) => {
@@ -177,9 +193,9 @@ export const CONTEXT_DATA = (props?: CONTEXT_DATAType) => {
     CreateNewComment: () => useMutationFetch<createNewCommentType['payload']>(
       async (payload) => {
         const token = await signJWT({ payload }, 180)
-        return await postJson(BASE_URL_API + `/comment/new`, { token })
+        return await postJson(BASE_URL_API + `/comments/new`, { token })
       },
-      ['comment/new']
+      ['comments/new']
     ),
     CommentLikeActions: () => useMutationFetch<CommentLikeActionsType>(
       async (data) => {
@@ -191,16 +207,25 @@ export const CONTEXT_DATA = (props?: CONTEXT_DATAType) => {
     FetchComments: (props: FetchCommentsType, status?: 'on' | 'off') => useQueryFetch(
       async () => {
         const token = await signJWT(props, 60)
-        return await fetchJson(BASE_URL_API + `/comments?token=${token}`)
+        return cache(async () => await fetchJson(BASE_URL_API + `/comments?token=${token}`))()
       },
       ['comments/' + props.post_id], { enabled: (status ?? 'on') == 'on' }
     ),
     FetchTrendingTags: (props: FetchTrendingTagsType, status?: 'on' | 'off') => useQueryFetch(
       async () => {
         const token = await signJWT(props, 60)
-        return await fetchJson(BASE_URL_API + `/tags/trending?token=${token}`)
+        return cache(async () => await fetchJson(BASE_URL_API + `/tags/trending?token=${token}`))()
       },
       ['tags/trending'], { enabled: (status ?? 'on') == 'on' }
+    ),
+
+    // HANDLE ACTIONS
+    CreateNewActions: () => useMutationFetch<makeActionsType>(
+      async (payload) => {
+        const token = await signJWT(payload, 180)
+        return await postJson(BASE_URL_API + `/actions/${payload.type}/${payload.actions}`, { token })
+      },
+      ['actions/']
     ),
   }
 }

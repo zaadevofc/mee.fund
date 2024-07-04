@@ -3,9 +3,6 @@ import {
   LuAccessibility,
   LuAward,
   LuBookMarked,
-  LuCalendarHeart,
-  LuCode2,
-  LuFlower,
   LuGamepad2,
   LuHome,
   LuHotel,
@@ -13,7 +10,6 @@ import {
   LuMonitorDot,
   LuPaintbrush,
   LuShare2,
-  LuSiren,
   LuSmile
 } from "react-icons/lu";
 
@@ -69,7 +65,7 @@ export const METADATA: Metadata = {
     description: SEO.SITE_DESCRIPTION,
     title: SEO.SITE_TITLE,
     emails: SEO.SITE_CREATOR_EMAIL,
-    images: SEO.SITE_URL + "assets/defaults/seo/android-chrome-512x512.png",
+    images: SEO.SITE_URL + "android-chrome-512x512.png",
   },
   twitter: {
     site: SEO.SITE_TITLE,
@@ -77,7 +73,7 @@ export const METADATA: Metadata = {
     title: SEO.SITE_TITLE,
     description: SEO.SITE_DESCRIPTION,
     creator: SEO.SITE_CREATOR,
-    images: SEO.SITE_URL + "assets/defaults/seo/android-chrome-512x512.png",
+    images: SEO.SITE_URL + "android-chrome-512x512.png",
     creatorId: SEO.SITE_CREATOR,
     card: "summary_large_image",
   },

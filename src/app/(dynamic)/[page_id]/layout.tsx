@@ -3,6 +3,7 @@ import { getUserProfile } from '~/app/api/v1/users/users.service';
 import { SEO } from '~/consts';
 import { BASE_URL_API, fetchJson } from '~/libs/hooks';
 import { signJWT } from '~/libs/tools';
+import { cache } from 'react';
 
 export async function generateMetadata({ params }: any): Promise<Metadata> {
   const user = decodeURIComponent(params.page_id);
@@ -11,7 +12,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
       title: user.replaceAll('-', ' ').replace(/\b\w/g, match => match.toUpperCase()),
     };
 
-  const res = (await getUserProfile({ username: user.substring(1) })) as any;
+  const res = await cache(async () => await getUserProfile({ username: user.substring(1) }))() as any;
 
   if (!res) return {};
 

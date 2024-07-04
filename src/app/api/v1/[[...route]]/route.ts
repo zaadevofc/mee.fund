@@ -47,9 +47,7 @@ app.use('*',
     const method = c.req.method;
     const queries = c.req.query()
     const bodies = (method == 'POST' && c.req.path.match('/upload')) ? await c.req.parseBody() : (method == 'POST' && !c.req.path.match('/upload')) ? await c.req.json() : ''
-    // console.log("🚀 ~ bodies:", bodies)
 
-    console.log("🚀 ~ token:", method)
     if (method == 'GET' && !queries.token) return c.json({ error: 'REQUIRED_TOKEN' }, 403)
     if (method == 'POST' && !bodies.token) return c.json({ error: 'REQUIRED_TOKEN' }, 403)
 
@@ -61,6 +59,7 @@ app.use('*',
     c.set('payload', res)
     c.set('validate', (keys: string[]) => {
       const check = compareArrays(keys, Object.keys(res))
+      console.log("🚀 ~ res:", res)
       if (!check) return MakeQueryError()
       return false
     })

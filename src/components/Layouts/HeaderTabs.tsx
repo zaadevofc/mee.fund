@@ -30,7 +30,7 @@ const HeaderTabs = (props: HeaderTabsType) => {
         role="tablist"
         className={
           props.className + (!props.sticky ? " sticky top-0 z-50" : "") +
-          " tabs-boxed tabs !rounded-none !border-b max-[412px]:!py-1.5 !py-3 bg-white/80 backdrop-blur-lg overflow-x-auto flex-shrink-0"
+          " tabs-boxed tabs !rounded-none !border-b max-[412px]:!py-1.5 !py-3 bg-white overflow-x-auto flex-shrink-0"
         }
       >
         {props

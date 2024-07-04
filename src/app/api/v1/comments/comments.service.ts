@@ -9,6 +9,7 @@ export type getManyCommentsType = {
   limit: number;
   offset: number;
   request_id?: string;
+  post_id?: string;
   options?: Prisma.CommentFindManyArgs;
 }
 
@@ -33,15 +34,21 @@ export const getManyComments = async (props: getManyCommentsType) => {
       };
     }
 
+    let limit = Number(props.limit || 10);
+    let offset = (Number(props.offset || 1) - 1) * limit
+
     let comments = await prisma.comment.findMany({
-      take: Number(props.limit || 10),
-      skip: Number(props.offset || 0),
+      take: limit + 1,
+      skip: offset,
       orderBy: { created_at: 'desc' },
       ...getReplies(5),
       ...props.options
     })
 
-    return comments
+    const hasMore = comments.length > limit
+    const result = hasMore ? comments.slice(0, -1) : comments
+
+    return { comments: result, hasMore }
   } catch (e) {
     console.log("🚀 ~ getManyComments ~ e:", e)
     MakeQueryError()

@@ -4,7 +4,7 @@
 
 @layer utilities {
   * {
-    @apply box-border transition-all duration-100;
+    @apply box-border transition-all;
   }
   body {
     @apply bg-white text-[15px] text-gray-800 [@media_(max-width:412px)]:text-[14.5px];

@@ -82,7 +82,7 @@ export const getManyPosts = async (props: getManyPostsType) => {
 
     posts = posts.map((post: any) => ({
       ...post,
-      comments: post.comments.filter((c: any) => c._count.likes >= 10)
+      comments: post.comments.filter((c: any) => c._count.likes >= 1)
     }));
 
     const hasMore = posts.length > limit
