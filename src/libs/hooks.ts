@@ -107,6 +107,8 @@ type CommentLikeActionsType = {
 }
 
 export type CONTEXT_DATAType = {
+  showAsideLeft: boolean
+  setShowAsideLeft: (data: any) => any
   makePlaceholder: any
   setMakePlaceholder: (data: any) => any
   initTempPosts: any

@@ -262,7 +262,6 @@ const ModalSubmit = memo(() => {
                   disabled={isLoading || !user}
                   placeholder={textLabeling[initSubmitType?.type!]?.placeholder}
                   className="bg-transparent"
-                  autoFocus
                 />
                 {memoizedImageContainer}
                 <div className={`${!isMediaList.length && 'hidden'} flex w-full items-center justify-between`}>

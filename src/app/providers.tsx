@@ -20,6 +20,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
   const [initSubmitType, setInitSubmitType] = useState<any>();
   const [initTempPosts, setInitTempPosts] = useState<any>();
   const [initTempComments, setInitTempComments] = useState<any>();
+  const [showAsideLeft, setShowAsideLeft] = useState(false);
 
   const { status } = useSession();
   splitbee.init();
@@ -42,6 +43,8 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
             setInitSubmitType,
             initTempComments,
             setInitTempComments,
+            showAsideLeft,
+            setShowAsideLeft,
           }),
         }}
       >

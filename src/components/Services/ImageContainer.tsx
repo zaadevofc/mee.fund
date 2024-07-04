@@ -30,7 +30,7 @@ const ImageContainer = (props: ImageContainerType) => {
               {x.type.startsWith('image/') && (
                 <Image src={x.src} className="h-auto w-full object-cover" onClick={() => props.onMediaClick?.(x, i)} onDoubleClick={() => props.onMediaDoubleClick?.(x, i)} alt={`Image ${i + 1}`} />
               )}
-              {x.type.startsWith('video/') && <ReactPlayer url={x.src} width="100%" height="100%" controls loop muted />}
+              {x.type.startsWith('video/') && <ReactPlayer url={x.src} width="100%" height="100%" playing controls loop muted />}
             </div>
           </Suspense>
         </PhotoView>

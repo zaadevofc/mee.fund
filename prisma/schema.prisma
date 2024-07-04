@@ -1,0 +1,248 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String  @id @default(uuid())
+  name     String?
+  username String  @unique
+  email    String  @unique
+  picture  String? @default("/assets/defaults/thumbnails/empty-picture.webp")
+  bio      String? @default("-")
+  lang     String? @default("id")
+
+  plan       USER_PLAN  @default(FREE)
+  role       USER_ROLE  @default(BASIC)
+  visibility VISIBILITY @default(PUBLIC)
+
+  is_verified     Boolean? @default(false)
+  is_blocked      Boolean? @default(false)
+  is_reported     Boolean? @default(false)
+  is_hireable     Boolean? @default(false)
+  two_factor_auth Boolean? @default(false)
+
+  followers Follow[] @relation("follower")
+  following Follow[] @relation("following")
+
+  posts     Post[]
+  bookmarks Bookmark[]
+  reposts   Repost[]
+  comment   Comment[]
+  activity  Activity[]
+
+  post_likes    PostLike[]
+  comment_likes CommentLike[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Post {
+  id      String  @id @default(uuid())
+  user    User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String?
+
+  ids        String        @unique
+  content    String
+  category   POST_CATEGORY
+  visibility VISIBILITY    @default(PUBLIC)
+
+  tags      Tag[]      @relation("TagsInPost")
+  media     Media[]
+  comments  Comment[]
+  likes     PostLike[]
+  bookmarks Bookmark[]
+  reposts   Repost[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("posts")
+}
+
+model Tag {
+  id String @id @default(uuid())
+
+  name  String @unique
+  posts Post[] @relation("TagsInPost")
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("tags")
+}
+
+model Media {
+  id         String   @id @default(uuid())
+  post       Post?    @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  post_id    String?
+  comment    Comment? @relation(fields: [comment_id], references: [id], onDelete: Cascade)
+  comment_id String?
+
+  file_id   String?
+  file_name String?
+
+  url        String
+  width      Int?
+  height     Int?
+  format     String
+  long_size  Int?
+  short_size String?
+
+  mimetype    String
+  orientation String?
+  metadata    Json?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("media")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id   String
+  post      Post     @relation(fields: [post_id], references: [id])
+  post_id   String
+  parent    Comment? @relation("ParentComments", fields: [parent_id], references: [id], onDelete: Cascade)
+  parent_id String?
+
+  ids     String  @unique
+  content String
+  media   Media[]
+
+  replies Comment[]     @relation("ParentComments")
+  likes   CommentLike[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("comments")
+}
+
+model PostLike {
+  id      String @id @default(uuid())
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
+  post    Post   @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  post_id String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([user_id, post_id])
+  @@map("post_likes")
+}
+
+model CommentLike {
+  id         String  @id @default(uuid())
+  user       User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    String
+  comment    Comment @relation(fields: [comment_id], references: [id], onDelete: Cascade)
+  comment_id String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([user_id, comment_id])
+  @@map("comment_likes")
+}
+
+model Bookmark {
+  id      String @id @default(uuid())
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
+  post    Post   @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  post_id String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([user_id, post_id])
+  @@map("bookmarks")
+}
+
+model Repost {
+  id      String @id @default(uuid())
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
+  post    Post   @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  post_id String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([user_id, post_id])
+  @@map("reposts")
+}
+
+model Activity {
+  id      String  @id @default(uuid())
+  user    User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String?
+
+  label     String?
+  content   String?
+  href      String?
+  thumbnail String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("activity")
+}
+
+model Follow {
+  id           String @id @default(uuid())
+  follower     User   @relation("follower", fields: [follower_id], references: [id], onDelete: Cascade)
+  follower_id  String
+  following    User   @relation("following", fields: [following_id], references: [id], onDelete: Cascade)
+  following_id String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([follower_id, following_id])
+  @@map("follows")
+}
+
+enum POST_CATEGORY {
+  PENDIDIKAN
+  CODING
+  PAMERAN
+  SHARING
+  TANYA_SEPUH
+  MEME
+  GAMING
+  KARYA_SENI
+  INFO_LOMBA
+  INFO_LOWONGAN
+}
+
+enum USER_ROLE {
+  BASIC
+  AUTHOR
+  ADMIN
+  VERIFIED
+  ARTIST
+}
+
+enum VISIBILITY {
+  PUBLIC
+  PRIVATE
+}
+
+enum USER_PLAN {
+  FREE
+  VIP
+  PRO
+  ULTIMATE
+}
