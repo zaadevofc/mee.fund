@@ -1,11 +1,11 @@
-import React from "react";
-import { LuFastForward } from "react-icons/lu";
+import React from 'react';
+import { LuFastForward } from 'react-icons/lu';
 
 const Brands = ({ className }: { className?: string }) => {
   return (
     <>
       <div className={className + ` flex items-center gap-2 text-xl`}>
-        <LuFastForward className="stroke-[3] stroke-primary" />
+        <LuFastForward className={className + " stroke-primary-500 flex-shrink-0 stroke-[2.5] text-2xl"} />
         <h1 className="font-bold">MeeFund</h1>
       </div>
     </>

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { default as InfiniteScrollWrapper } from 'react-infinite-scroll-component';
-import ChildLoading from './ChildLoading';
+import ChildLoading from './ChildAlerts';
 
 type InfiniteScrollType = {
   children: any;

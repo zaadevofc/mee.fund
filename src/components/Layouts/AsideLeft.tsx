@@ -2,85 +2,131 @@
 
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { LuBadgeCheck, LuBellDot, LuSettings2, LuUser2 } from 'react-icons/lu';
-import { POST_CATEGORY } from '~/consts';
-import Image from '../Services/Image';
+import { usePathname } from 'next/navigation';
+import {
+  LuBarChart2,
+  LuBell,
+  LuFastForward,
+  LuHelpCircle,
+  LuHome,
+  LuLaptop,
+  LuPlusCircle,
+  LuSearch,
+  LuSettings2,
+  LuShieldCheck,
+  LuTrophy,
+} from 'react-icons/lu';
+import Image from '~/components/Services/Image';
+import { cn } from '~/libs/tools';
 import Markdown from '../Services/Markdown';
+import { POST_CATEGORY } from '~/consts';
 
-const AsideLeft = ({ className }: any) => {
-  const { data: user }: any = useSession();
+const DEFAULT_SIDE = [
+  { icon: LuHome, label: 'Beranda', href: '/' },
+  { icon: LuTrophy, label: 'Populer', href: '/populer' },
+  { icon: LuBarChart2, label: 'Trending', href: '/trending' },
+  { icon: LuSearch, label: 'Explore', href: '/explore' },
+  { icon: LuBell, label: 'Aktifitas', href: '/activity' },
+  { icon: LuSettings2, label: 'Settings', href: '/settings' },
+];
+
+const MORE_SIDE = [
+  // { icon: LuFastForward, label: 'About', href: '/~/about' },
+  // { icon: LuLaptop, label: 'Author', href: '/~/author' },
+  // { icon: LuHelpCircle, label: 'Help', href: '/~/help' },
+  { icon: LuShieldCheck, label: 'Privasi', href: '/~/privacy' },
+];
+
+const AsideLeft = () => {
   const path = usePathname();
-  const router = useRouter();
-
-  const ADVANCE_SIDE = [
-    { icon: LuUser2, label: 'Profile', href: '/@' + user?.username },
-    { icon: LuBellDot, label: 'Aktifitas', href: '/activity' },
-    { icon: LuSettings2, label: 'Settings', href: '/settings' },
-  ];
+  const { data: user }: any = useSession();
 
   return (
     <>
-      <aside className={className + " hide-scroll sticky top-0 flex max-h-[calc(100vh-4rem)] w-full min-w-[17rem] max-w-min flex-col gap-3 overflow-y-auto pb-20"}>
-        <div className="flex flex-col gap-4">
-          <label
-            onClick={() => user && router.push(`/@${user?.username}`)}
-            htmlFor={!user ? 'masuk_akun_modal' : ''}
-            className={`flex w-full cursor-pointer items-start gap-3 rounded-lg border bg-white p-3 active:scale-[.96]`}
+      <aside className="hide-scroll sticky top-0 flex max-h-dvh min-w-[18rem] max-w-min flex-col gap-3 overflow-y-auto max-[1220px]:min-w-[16rem] max-[1168px]:min-w-min max-[590px]:hidden">
+        <div className="flex gap-4 rounded-xl border bg-white p-5 py-3.5 max-[1168px]:!p-3.5">
+          <Image className="size-10 w-fit rounded-full" src={user?.picture} />
+          <div className="flex flex-col text-[15px] max-[1168px]:hidden">
+            <h1 className="line-clamp-1 font-bold">{user?.name ?? 'MeeFund'}</h1>
+            <Markdown className="line-clamp-2 text-sm">{user ? (user?.bio || 'Tidak ada bio') : 'Login untuk mengakses'}</Markdown>
+          </div>
+        </div>
+        <div className="flex flex-col rounded-xl border bg-white">
+          <div
+            className={cn(
+              `group flex cursor-pointer items-center gap-3 px-6 py-3.5 font-medium active:scale-[.95]`,
+              'hover:text-primary-500 [&_svg]:hover:stroke-primary-500'
+            )}
           >
-            <div className="flex-shrink-0 overflow-hidden">
-              <Image className="size-10 rounded-full border" src={user?.picture} width={100} height={100} alt={`@${user?.username} profile picture`} />
-            </div>
-            <div className="flex w-full flex-col">
-              <div className="flex items-center gap-0.5">
-                <strong className="line-clamp-1">{user?.name ?? 'MeeFund'}</strong>
-                <LuBadgeCheck className={`${user?.is_verified && '!block'} hidden fill-green-400 stroke-white text-lg`} />
-              </div>
-              <span className="flex items-center gap-2 text-sm opacity-60">
-                <Markdown className={`line-clamp-1 leading-tight`} text={!user ? 'Login ke akun MeeFund Ad laborum qui veniam enim.' : !!user?.bio ? user?.bio : '_Klik untuk tambah bio_'} />
-              </span>
-            </div>
-          </label>
-          <ul className="menu flex flex-col gap-3 !p-0 [&>li>details>summary]:border [&>li>details>ul]:mt-2 [&_li>details>ul>li]:!py-1 [&_summary]:sticky [&_summary]:top-0 [&_summary]:z-10 [&_summary]:bg-white">
-            <li>
-              <details open={POST_CATEGORY.some(x => x.href == path)}>
-                <summary>
-                  <h1 className="text-shade font-bold">EXPLORE</h1>
-                </summary>
-                <ul>
-                  {POST_CATEGORY.map((x, i) => {
-                    return (
-                      <li>
-                        <Link href={x.href} className={`${x.href == path && 'font-semibold !text-black [&_svg]:text-primary'} text-shade group flex items-center gap-3`}>
-                          <x.icon className="stroke-[1.7] text-xl" />
-                          <h1 className={`block`}>{x.label}</h1>
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </details>
-            </li>
-            <li>
-              <details open={ADVANCE_SIDE.some(x => x.href == path)}>
-                <summary>
-                  <h1 className="text-shade font-bold">ADVANCE</h1>
-                </summary>
-                <ul className="!gap-0">
-                  {ADVANCE_SIDE.map((x, i) => {
-                    return (
-                      <li>
-                        <Link href={x.href} className={`${x.href == path && 'font-semibold !text-black [&_svg]:text-primary'} text-shade group flex items-center gap-3`}>
-                          <x.icon className="stroke-[1.7] text-xl" />
-                          <h1 className={`block`}>{x.label}</h1>
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </details>
-            </li>
-          </ul>
+            <LuPlusCircle className="flex-shrink-0 text-xl text-secondary-400" />
+            <h1 className="text-[15px] max-[1168px]:hidden">Buat Postingan</h1>
+          </div>
+        </div>
+        <div className="flex flex-col rounded-xl border bg-white">
+          {DEFAULT_SIDE.map((x, i) => (
+            <Link
+              href={x.href}
+              className={cn(
+                `group relative flex cursor-pointer items-center gap-3 px-6 py-3.5 font-medium`,
+                path == x.href && 'font-semibold text-primary-500 [&_svg]:stroke-primary-500',
+                path != x.href && 'hover:text-primary-500 [&_svg]:hover:stroke-primary-500'
+              )}
+            >
+              <div
+                className={cn(
+                  'absolute inset-y-0 left-0 my-auto h-1/2 w-1 rounded-full',
+                  path == x.href && 'bg-primary-500',
+                  path != x.href && 'group-hover:bg-primary-500'
+                )}
+              />
+              <x.icon className="flex-shrink-0 text-xl text-secondary-400" />
+              <h1 className="text-[15px] max-[1168px]:hidden">{x.label}</h1>
+            </Link>
+          ))}
+        </div>
+        <div className="flex flex-col rounded-xl border bg-white">
+          {POST_CATEGORY.slice(1).map((x, i) => (
+            <Link
+              href={x.href}
+              className={cn(
+                `group relative flex cursor-pointer items-center gap-3 px-6 py-3.5 font-medium`,
+                path == x.href && 'font-semibold text-primary-500 [&_svg]:stroke-primary-500',
+                path != x.href && 'hover:text-primary-500 [&_svg]:hover:stroke-primary-500'
+              )}
+            >
+              <div
+                className={cn(
+                  'absolute inset-y-0 left-0 my-auto h-1/2 w-1 rounded-full',
+                  path == x.href && 'bg-primary-500',
+                  path != x.href && 'group-hover:bg-primary-500'
+                )}
+              />
+              <x.icon className="flex-shrink-0 text-xl text-secondary-400" />
+              <h1 className="text-[15px] max-[1168px]:hidden">{x.label}</h1>
+            </Link>
+          ))}
+        </div>
+        <div className="flex flex-col rounded-xl border bg-white">
+          {MORE_SIDE.map((x, i) => (
+            <Link
+              href={x.href}
+              className={cn(
+                `group relative flex cursor-pointer items-center gap-3 px-6 py-3.5 font-medium`,
+                path == x.href && 'font-semibold text-primary-500 [&_svg]:stroke-primary-500',
+                path != x.href && 'hover:text-primary-500 [&_svg]:hover:stroke-primary-500'
+              )}
+            >
+              <div
+                className={cn(
+                  'absolute inset-y-0 left-0 my-auto h-1/2 w-1 rounded-full',
+                  path == x.href && 'bg-primary-500',
+                  path != x.href && 'group-hover:bg-primary-500'
+                )}
+              />
+              <x.icon className="flex-shrink-0 text-xl text-secondary-400" />
+              <h1 className="text-[15px] max-[1168px]:hidden">{x.label}</h1>
+            </Link>
+          ))}
         </div>
       </aside>
     </>

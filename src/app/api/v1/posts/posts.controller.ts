@@ -48,13 +48,14 @@ app.post('/new', async (c) => {
   }
 })
 
-app.get('/detail', async (c) => {
+app.get('/:id', async (c) => {
   try {
-    const check = c.get('validate')(['ids | request_id'])
+    const { id } = c.req.param()
+    const check = c.get('validate')(['request_id'])
     if (check) return check
 
-    const { ids, request_id } = c.get('payload')
-    const post = await getPostDetail({ ids, request_id })
+    const { request_id } = c.get('payload')
+    const post = await getPostDetail({ ids: id, request_id })
 
     if (!post) MakeError(404, 'NOT_FOUND', 'Postingan tidak ditemukan.')
 
@@ -64,15 +65,16 @@ app.get('/detail', async (c) => {
   }
 })
 
-app.get('/comments', async (c) => {
+app.get('/:id/comments', async (c) => {
   try {
-    const check = c.get('validate')(['limit', 'offset', 'post_id | request_id'])
+    const { id } = c.req.param()
+    const check = c.get('validate')(['limit', 'offset', 'request_id'])
     if (check) return check
 
     const { limit, offset, post_id, request_id } = c.get('payload')
     const comments = await getManyComments({
       limit, offset, request_id, options: {
-        where: { post: { ids: post_id }, parent_id: null }
+        where: { post: { ids: id }, parent_id: null }
       }
     })
 

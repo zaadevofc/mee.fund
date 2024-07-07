@@ -1,16 +1,20 @@
 import { useRouter } from "next/navigation";
 import { LuArrowLeft } from "react-icons/lu";
 
-const HeaderButton = ({ label }: Partial<{ label: string }>) => {
+type HeaderButtonType = {
+  label?:string;
+}
+
+const HeaderButton = (props: HeaderButtonType) => {
   const router = useRouter();
 
   return (
     <>
-      <div className="flex items-center gap-4 !pb-3">
-        <h1 onClick={() => router.back()} className="btn !btn-xs">
+      <div className="flex items-center gap-4 p-2 max-[460px]:px-3 min-[460px]:rounded-xl min-[460px]:border w-fit">
+        <button className="border-none p-0" onClick={() => router.back()}>
           <LuArrowLeft />
-        </h1>
-        <h1 className="font-semibold">{label}</h1>
+        </button>
+        {props.label && <h1 className="font-semibold">{props.label}</h1>}
       </div>
     </>
   );

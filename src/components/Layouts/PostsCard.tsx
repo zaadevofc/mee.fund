@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
-import { ReactNode, useContext, useState, useMemo, useCallback } from 'react';
+import { ReactNode, useContext, useState, useMemo, useCallback, memo } from 'react';
 import { Collapse } from 'react-collapse';
 import * as Icons from 'react-icons/lu';
 import { SystemContext } from '~/app/providers';
@@ -47,7 +47,7 @@ type PostsCardType = {
   hideNotCommentActions?: boolean;
 };
 
-const PostsCard = (props: PostsCardType) => {
+const PostsCard = memo((props: PostsCardType) => {
   const [isActions, setActions] = useState({ likes: false, reposts: false, bookmarks: false });
   const [isCollapse, setCollapse] = useState(true);
 
@@ -94,7 +94,7 @@ const PostsCard = (props: PostsCardType) => {
         comment_id: payload?.id,
       } as any);
     },
-    [createNewActions, indicator, payload, setInitTempPosts, props.type, user?.id]
+    []
   );
 
   const actionsList = useMemo(
@@ -270,6 +270,6 @@ const PostsCard = (props: PostsCardType) => {
       </div>
     </article>
   );
-};
+});
 
 export default PostsCard;

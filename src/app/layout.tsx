@@ -1,9 +1,9 @@
 import { Libre_Franklin } from 'next/font/google';
 import Script from 'next/script';
-import 'react-photo-view/dist/react-photo-view.css';
 import { METADATA } from '~/consts';
-import './globals.css';
 import SessionWrapper from './session';
+import 'react-photo-view/dist/react-photo-view.css';
+import './globals.css';
 
 export const metadata = METADATA;
 const fonts = Libre_Franklin({ subsets: ['latin'] });

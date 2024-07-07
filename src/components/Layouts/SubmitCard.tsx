@@ -15,15 +15,15 @@ const SubmitCard = (props: CONTEXT_DATAType['initSubmitType']) => {
       <label
         htmlFor="make_post_modal"
         onClick={() => setInitSubmitType!(props)}
-        className="flex cursor-pointer flex-col rounded-lg border p-3.5 active:scale-[.97]"
+        className="flex cursor-pointer flex-col border p-3.5 active:scale-[.97] min-[460px]:rounded-lg"
       >
-        <div className="relative flex items-start gap-3">
+        <div className="relative flex items-start gap-3 text-[15px]">
           <Image src={user?.picture} className="size-9 rounded-full" />
           <div className="flex w-full flex-col">
             <div className="flex items-center gap-1">
               <div className="flex items-center gap-0.5">
                 <span className="font-bold">{user?.name ?? 'MeeFund'}</span>
-                <LuBadgeCheck className={`${!user?.is_verified && 'hidden'} flex-shrink-0 fill-primary text-lg text-white`} />
+                <LuBadgeCheck className={`${!user?.is_verified && 'hidden'} fill-primary flex-shrink-0 text-lg text-white`} />
               </div>
             </div>
             <h1 className="text-shade text-sm">Klik untuk membuat {props?.type == 'posts' ? 'postingan.' : 'komentar.'}</h1>

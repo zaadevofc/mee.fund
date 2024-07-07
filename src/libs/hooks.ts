@@ -39,6 +39,7 @@ export const postMedia = async (file: File, bucket: string) => {
     body: formData,
     method: "POST",
     headers: { 'Authorization': `Bearer ${auth}` },
+    cache: 'force-cache'
   }).then((x) => x.json());
 }
 
@@ -107,6 +108,8 @@ type CommentLikeActionsType = {
 }
 
 export type CONTEXT_DATAType = {
+  showAuthModal: boolean
+  setAuthModal: (data: any) => any
   showAsideLeft: boolean
   setShowAsideLeft: (data: any) => any
   makePlaceholder: any
@@ -230,4 +233,21 @@ export const CONTEXT_DATA = (props?: CONTEXT_DATAType) => {
       ['actions/']
     ),
   }
+}
+
+export const fetchAPi = async ([url, payload]: any) => {
+  const token = await signJWT(payload, 180)
+  const uri = BASE_URL_API + url + '?token=' + token
+  const auth = await signJWT(SecretKey, 180);
+  return await fetch(uri, {
+    headers: { 'Authorization': `Bearer ${auth}` },
+  }).then((x) => x.json());
+}
+
+export const usePosts = (payload: getManyPostsType) => {
+  return useSWR([`/posts/${payload.ids || ''}`, payload], fetchAPi)
+}
+
+export const useComments = (payload: getManyCommentsType) => {
+  return useSWR([`/posts/${payload.post_id || ''}/comments`, payload], fetchAPi)
 }

@@ -1,16 +1,13 @@
-'use client';
-
-import dynamic from 'next/dynamic';
-import Wrapper from '~/components/Layouts/Wrapper';
-
-const RenderPosts = dynamic(() => import('~/components/Renders/RenderPosts'));
+import React from 'react';
+import Container from '~/components/Layouts/Container';
+import RenderPosts from '~/components/Renders/RenderPosts';
 
 const MainPage = () => {
   return (
     <>
-      <Wrapper>
+      <Container>
         <RenderPosts />
-      </Wrapper>
+      </Container>
     </>
   );
 };

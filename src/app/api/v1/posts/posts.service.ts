@@ -5,8 +5,10 @@ import { MakeQueryError } from '../[[...route]]/route';
 import { USER_BASIC_SCHEMA } from "../users/users.service";
 
 export type getManyPostsType = {
-  limit: number;
-  offset: number;
+  limit?: number;
+  offset?: number;
+  id?: string;
+  ids?: string;
   username?: string;
   request_id?: string;
   type?: "random" | "reposts" | "likes" | "bookmarks" | undefined;
@@ -19,7 +21,9 @@ export type createNewPostType = {
   options?: Prisma.PostCreateArgs;
 }
 
-export type getPostDetailType = ({ ids: string } | { id: string }) & {
+export type getPostDetailType = {
+  ids?: string;
+  id?: string;
   request_id?: string;
 }
 

@@ -1,5 +1,7 @@
 'use client';
 
+import { PrimeReactProvider } from 'primereact/api';
+import Tailwind from 'primereact/passthrough/tailwind';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import splitbee from '@splitbee/web';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -21,6 +23,8 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
   const [initTempPosts, setInitTempPosts] = useState<any>();
   const [initTempComments, setInitTempComments] = useState<any>();
   const [showAsideLeft, setShowAsideLeft] = useState(false);
+
+  const [showAuthModal, setAuthModal] = useState(false);
 
   const { status } = useSession();
   splitbee.init();
@@ -45,13 +49,17 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
             setInitTempComments,
             showAsideLeft,
             setShowAsideLeft,
+            showAuthModal,
+            setAuthModal,
           }),
         }}
       >
         <QueryClientProvider client={queryClient}>
-          <PhotoProvider>
-            <main>{children}</main>
-          </PhotoProvider>
+          <PrimeReactProvider value={{ unstyled: true, pt: Tailwind, ripple: true }}>
+            <PhotoProvider>
+              <main>{children}</main>
+            </PhotoProvider>
+          </PrimeReactProvider>
         </QueryClientProvider>
       </SystemContext.Provider>
     </>

@@ -1,12 +1,10 @@
 'use client';
 
 import { notFound } from 'next/navigation';
-import Wrapper from '~/components/Layouts/Wrapper';
+import Container from '~/components/Layouts/Container';
+import RenderPosts from '~/components/Renders/RenderPosts';
 import { POST_CATEGORY } from '~/consts';
 import UserDetailPage from './UserDetailPage';
-import dynamic from 'next/dynamic';
-
-const RenderPosts = dynamic(() => import('~/components/Renders/RenderPosts'));
 
 const PostsPage = (props: any) => {
   const page_id = decodeURIComponent(props.params.page_id) as string;
@@ -18,9 +16,9 @@ const PostsPage = (props: any) => {
 
   return (
     <>
-      <Wrapper>
+      <Container showHeaderButton>
         <RenderPosts category={category} />
-      </Wrapper>
+      </Container>
     </>
   );
 };

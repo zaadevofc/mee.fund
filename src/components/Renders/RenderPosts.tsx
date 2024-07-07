@@ -1,14 +1,10 @@
-import { useSession } from 'next-auth/react';
-import dynamic from 'next/dynamic';
-import { useContext, useMemo, useState } from 'react';
-import { getManyPostsType } from '~/app/api/v1/posts/posts.service';
-import { SystemContext } from '~/app/providers';
-import { FetchPostsType } from '~/libs/hooks';
-import ChildLoading from '../Services/ChildLoading';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { useWindowWidth } from '@react-hook/window-size';
+'use client';
 
-const PostsCard = dynamic(() => import('../Layouts/PostsCard'));
+import { useSession } from 'next-auth/react';
+import { getManyPostsType } from '~/app/api/v1/posts/posts.service';
+import { FetchPostsType, usePosts } from '~/libs/hooks';
+import ChildAlerts from '../Services/ChildAlerts';
+import PostCard from '../Services/PostCard';
 
 type RenderPostsType = {
   type?: getManyPostsType['type'];
@@ -18,14 +14,9 @@ type RenderPostsType = {
 };
 
 const RenderPosts = (props: RenderPostsType) => {
-  const { FetchPosts, makePlaceholder, setMakePlaceholder, setInitTempPosts, initTempPosts } = useContext(SystemContext);
-  const [offset, setOffset] = useState(0);
-  const [items, setItems] = useState<Array<any>>([]);
-  const windowWidth = useWindowWidth();
-
   const { data: user }: any = useSession();
-  const { data, isLoading, refetch }: any = FetchPosts({
-    offset,
+  const { data, isLoading } = usePosts({
+    offset: 0,
     limit: 9999,
     request_id: user?.id ?? '',
     username: props.username,
@@ -33,14 +24,16 @@ const RenderPosts = (props: RenderPostsType) => {
     type: props.type,
   });
 
-  useMemo(() => {
-    if (data?.data?.posts) {
-      setInitTempPosts!((x: any) => [...(new Set([...(x || []), ...data.data.posts]) as any)]);
-    }
-  }, [data?.data?.posts]);
-
-  if (isLoading && data?.data?.posts?.length === 0) return <ChildLoading />;
-  return <>{initTempPosts?.map((x: any, i: any) => <PostsCard payload={x} type="posts" allowLinked cleanStyle columnStyle={windowWidth < 490} showSideOutline={windowWidth > 490} showHighlight />)}</>;
+  if (isLoading) return <ChildAlerts loading />;
+  if (!data?.data?.posts?.length) return <ChildAlerts label='Tidak ada postingan' />
+  return (
+    <>
+      <div className="flex flex-col gap-3 max-[460px]:divide-y">{data?.data?.posts?.map((x: any) => (
+        <PostCard payload={x} />
+      ))}
+      </div>
+    </>
+  );
 };
 
 export default RenderPosts;

@@ -1,4 +1,4 @@
-import withPWAInit from "@ducanh2912/next-pwa";
+import withPWAInit from '@ducanh2912/next-pwa';
 
 const withPWA = withPWAInit({
   dest: 'public',
@@ -14,15 +14,24 @@ const withPWA = withPWAInit({
   },
   fallbacks: {
     document: '/~offline',
-    image: "/assets/defaults/thumbnails/offline.jpg",
-    video: "/assets/defaults/thumbnails/offline.mp4",
+    image: '/assets/defaults/thumbnails/offline.jpg',
+    video: '/assets/defaults/thumbnails/offline.mp4',
   },
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  i18n: {
+    localeDetection: false,
+    locales: ['id'],
+    defaultLocale: 'id',
+  },
+  experimental: {
+    scrollRestoration: true,
+    swcMinify: true,
+  },
   images: {
-    formats: ['image/avif'],
+    formats: ['image/webp'],
     minimumCacheTTL: 999999,
     remotePatterns: [
       { hostname: 'avatars.githubusercontent.com' },

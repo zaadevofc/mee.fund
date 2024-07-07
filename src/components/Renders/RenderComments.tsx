@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { SystemContext } from '~/app/providers';
-import ChildLoading from '../Services/ChildLoading';
+import ChildLoading from '../Services/ChildAlerts';
 import InfiniteScroll from '../Services/InfiniteScroll';
 
 const PostsCard = dynamic(() => import('../Layouts/PostsCard'));

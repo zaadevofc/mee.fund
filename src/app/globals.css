@@ -4,10 +4,10 @@
 
 @layer utilities {
   * {
-    @apply box-border transition-all;
+    @apply box-border select-none transition-all;
   }
   body {
-    @apply bg-white text-[15px] text-gray-800 [@media_(max-width:412px)]:text-[14.5px];
+    @apply text-gray-800;
   }
 
   .hide-scroll {
@@ -21,7 +21,7 @@
 
 @layer components {
   .markdown a {
-    @apply text-primary;
+    @apply text-blue-500;
   }
 
   .markdown img {
@@ -38,17 +38,21 @@
     @apply !outline-none !ring-0 active:!outline-none;
   }
 
+  button {
+    @apply rounded-lg border px-3 py-0.5 text-[15px] active:scale-[.95] font-semibold;
+  }
+
+  .dialog {
+    @apply w-[30rem] max-w-[95dvw] rounded-xl border bg-white p-5 drop-shadow-[100px_100px_150px_rgba(0,0,0,0.6)];
+  }
+
   img,
   Image {
     @apply select-none;
   }
 
-  .rounded-lg {
-    @apply !rounded-[.7rem];
-  }
-
   .btn {
-    @apply btn-sm rounded-lg font-normal [@media_(max-width:412px)]:!btn-xs [@media_(max-width:412px)]:!px-3 [@media_(max-width:412px)]:!text-[15px];
+    @apply rounded-lg font-normal [@media_(max-width:412px)]:!px-3 [@media_(max-width:412px)]:!text-[15px];
   }
 
   .text-shade {
@@ -64,7 +68,7 @@
   }
 
   .modal {
-    @apply modal-bottom [@media_(min-width:450px)]:modal-middle;
+    @apply bg-teal-50;
 
     .modal-box {
       @apply border;
@@ -76,10 +80,126 @@
   }
 
   .textmark-rainbow {
-    @apply bg-gradient-to-r from-sky-400 via-rose-400 to-lime-400 bg-clip-text !text-transparent;
+    @apply bg-gradient-to-t from-yellow-500 via-purple-500 to-blue-500 bg-clip-text !text-transparent;
   }
 
   .clean {
     @apply !rounded-none !border-none !p-0;
+  }
+}
+
+@layer utilities {
+  :root {
+    --color-canvas-default: #ffffff;
+    --color-canvas-subtle: #f6f8fa;
+    --color-border-default: #d0d7de;
+    --color-border-muted: hsla(210, 18%, 87%, 1);
+  }
+  .markdown {
+    table {
+      border-spacing: 0;
+      border-collapse: collapse;
+      display: block;
+      margin-top: 0;
+      margin-bottom: 16px;
+      width: max-content;
+      max-width: 100%;
+      overflow: auto;
+    }
+
+    tr {
+      background-color: var(--color-canvas-default);
+      border-top: 1px solid var(--color-border-muted);
+    }
+
+    tr:nth-child(2n) {
+      background-color: var(--color-canvas-subtle);
+    }
+
+    td,
+    th {
+      padding: 6px 13px;
+      border: 1px solid var(--color-border-default);
+    }
+
+    th {
+      font-weight: 600;
+    }
+
+    table img {
+      background-color: transparent;
+    }
+
+    /* Style the footnotes section. */
+    .footnotes {
+      font-size: smaller;
+      color: #8b949e;
+      border-top: 1px solid #30363d;
+    }
+
+    /* Hide the section label for visual users. */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      word-wrap: normal;
+      border: 0;
+    }
+
+    /* Place `[` and `]` around footnote references. */
+    [data-footnote-ref]::before {
+      content: '[';
+    }
+
+    [data-footnote-ref]::after {
+      content: ']';
+    }
+
+    ul {
+      list-style-type: disc;
+      padding-left: 2em;
+    }
+    ol {
+      list-style-type: decimal;
+      padding-left: 2em;
+    }
+
+    blockquote {
+      border-left: 4px solid #ccc;
+      margin-left: 0;
+      padding-left: 1em;
+    }
+  }
+
+  .media-container {
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .media-item {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  @supports (aspect-ratio: 1) {
+    .media-item {
+      max-width: 100%;
+      max-height: 100%;
+      aspect-ratio: auto;
+      object-fit: contain;
+    }
+
+    .media-item[style*='aspect-ratio'] {
+      max-width: 300px;
+      width: auto;
+      height: auto;
+    }
   }
 }

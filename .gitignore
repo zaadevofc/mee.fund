@@ -40,7 +40,7 @@ next-env.d.ts
 .xata
 .xatarc
 
-# prisma
+prisma
 
 # next-pwa
 **/public/workbox**
