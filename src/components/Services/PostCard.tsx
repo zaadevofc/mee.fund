@@ -36,15 +36,15 @@ const PostCard = memo((props: PostCardType) => {
   const Content = () => (
     <div className={cn('flex flex-col gap-3', !props.asComment ? 'text-[15px]' : 'text-[14px]')}>
       {props?.payload?.content && <Markdown text={props?.payload?.content} />}
-      <ImageContainer media={props?.payload?.media.map((x: any) => ({ src: x?.url, type: x?.mimetype }))} />
+      <ImageContainer small={props.asComment} media={props?.payload?.media.map((x: any) => ({ src: x?.url, type: x?.mimetype }))} />
     </div>
   );
 
   return (
     <>
       <div
-        onClick={e => !isSelf && handle(e, router.push(`/post/${props.payload?.ids}`))}
-        className={cn('flex flex-col gap-3 pb-2 pt-4 min-[460px]:p-4 max-[460px]:px-3 min-[460px]:rounded-xl min-[460px]:border', isSelf ? 'p-4' : 'cursor-pointer', props.asComment && 'pb-2 pt-3')}
+        onClick={e => !props.asComment && !isSelf && handle(e, router.push(`/post/${props.payload?.ids}`))}
+        className={cn('flex flex-col gap-3 pb-2 pt-4 min-[460px]:p-4 max-[460px]:px-3 min-[460px]:rounded-xl min-[460px]:border', isSelf ? 'p-4' : 'cursor-pointer', props.asComment && 'pb-2 pt-3 cursor-auto')}
       >
         <div className={cn('flex gap-3', !props.asComment && 'items-center')}>
           <Image className={cn('rounded-lg border', props.asComment ? 'size-8' : 'size-9')} src={props.payload?.user?.picture} />
@@ -66,9 +66,9 @@ const PostCard = memo((props: PostCardType) => {
         {props.asComment && !!props.payload?.replies?.length && <button className="ml-10 w-fit bg-secondary-50 text-[13px]">Lihat balasan</button>}
         <div className={cn('flex gap-2 rounded-lg border bg-secondary-50 p-2 mt-1', props.payload?.comments?.length == 0 && 'hidden', props.asComment && 'hidden')}>
           <Image className="size-8 rounded-lg border" src={props.payload?.comments?.[0]?.user?.picture} />
-          <div className="flex flex-col -space-y-1 text-sm">
+          <div className="flex flex-col text-sm">
             <h1 className="font-semibold">{props.payload?.comments?.[0]?.user?.name}</h1>
-            <Markdown className="line-clamp-2" text={props.payload?.comments?.[0]?.content} />
+            <Markdown className="line-clamp-2 leading-[17px]" text={props.payload?.comments?.[0]?.content} />
           </div>
         </div>
       </div>

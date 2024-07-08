@@ -1,7 +1,5 @@
 'use client';
 
-import { PrimeReactProvider } from 'primereact/api';
-import Tailwind from 'primereact/passthrough/tailwind';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import splitbee from '@splitbee/web';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -9,8 +7,9 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useSession } from 'next-auth/react';
 import NextTopLoader from 'nextjs-toploader';
+import { PrimeReactProvider } from 'primereact/api';
+import Tailwind from 'primereact/passthrough/tailwind';
 import React, { createContext, useState } from 'react';
-import { PhotoProvider } from 'react-photo-view';
 import { CONTEXT_DATA } from '~/libs/hooks';
 import Loading from './loading';
 
@@ -32,7 +31,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
   if (status == 'loading') return <Loading />;
   return (
     <>
-      <NextTopLoader color="#0069FF" showSpinner={false} />
+      <NextTopLoader color="#C4495F" showSpinner={false} />
       <GoogleAnalytics gaId="G-W9E3FW4JKX" />
       <Analytics />
       <SpeedInsights />
@@ -56,9 +55,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
       >
         <QueryClientProvider client={queryClient}>
           <PrimeReactProvider value={{ unstyled: true, pt: Tailwind, ripple: true }}>
-            <PhotoProvider>
-              <main>{children}</main>
-            </PhotoProvider>
+            <main>{children}</main>
           </PrimeReactProvider>
         </QueryClientProvider>
       </SystemContext.Provider>

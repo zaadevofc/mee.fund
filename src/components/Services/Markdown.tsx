@@ -1,17 +1,17 @@
 'use client';
 
+import 'katex/dist/katex.min.css';
 import Link from 'next/link';
 import { default as MarkdownWrapper } from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { coy } from 'react-syntax-highlighter/dist/cjs/styles/prism';
-import rehypeRaw from 'remark-breaks';
-import remarkBreaks from 'remark-breaks';
-import rehypeSanitize from 'rehype-sanitize';
-import remarkGfm from 'remark-gfm';
-import { RAINBOW_TEXT } from '~/consts';
 import rehypeKatex from 'rehype-katex';
+import rehypeSanitize from 'rehype-sanitize';
+import { default as rehypeRaw, default as remarkBreaks } from 'remark-breaks';
+import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
-import 'katex/dist/katex.min.css';
+import { RAINBOW_TEXT } from '~/consts';
+import { cn } from '~/libs/tools';
 
 const Markdown = ({ text, className, children }: any) => {
   let rainbowText = RAINBOW_TEXT;
@@ -23,11 +23,10 @@ const Markdown = ({ text, className, children }: any) => {
   txt = txt.replace(/@(\w+)/gi, `<a href='/@$1' className='font-bold'>@$1</a>`);
 
   return (
-    <div className={className + ' markdown'}>
+    <div className={cn('markdown whitespace-pre-wrap break-words leading-[21px]', className)}>
       <MarkdownWrapper
         rehypePlugins={[rehypeSanitize, rehypeRaw, rehypeKatex]}
         remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
-        className={'whitespace-pre-wrap break-words leading-[21px]'}
         components={{
           a({ node, inline, className, children, ...props }: any) {
             return <Link {...props}>{children}</Link>;

@@ -7,6 +7,7 @@
     @apply box-border select-none transition-all;
   }
   body {
+    touch-action: pan-x pan-y;
     @apply text-gray-800;
   }
 
@@ -39,7 +40,7 @@
   }
 
   button {
-    @apply rounded-lg border px-3 py-0.5 text-[15px] active:scale-[.95] font-semibold;
+    @apply rounded-lg border px-3 py-0.5 text-[15px] font-semibold active:scale-[.95];
   }
 
   .dialog {
@@ -171,35 +172,6 @@
       border-left: 4px solid #ccc;
       margin-left: 0;
       padding-left: 1em;
-    }
-  }
-
-  .media-container {
-    width: 300px;
-    height: 300px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .media-item {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
-
-  @supports (aspect-ratio: 1) {
-    .media-item {
-      max-width: 100%;
-      max-height: 100%;
-      aspect-ratio: auto;
-      object-fit: contain;
-    }
-
-    .media-item[style*='aspect-ratio'] {
-      max-width: 300px;
-      width: auto;
-      height: auto;
     }
   }
 }
