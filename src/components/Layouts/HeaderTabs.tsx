@@ -1,16 +1,13 @@
-import Link from "next/link";
-import React, { useState } from "react";
+import { useState } from 'react';
+import { cn } from '~/libs/utils';
 
 export type HeaderTabsType = {
   className?: string;
   sticky?: boolean;
-  tabs: (
-    | {
-        label: string;
-        value: string;
-      }
-    | false
-  )[];
+  tabs: {
+    label: string;
+    value: string;
+  }[];
   onTabsClick?: (value: string) => void;
 };
 
@@ -26,25 +23,29 @@ const HeaderTabs = (props: HeaderTabsType) => {
 
   return (
     <>
-      <div
-        role="tablist"
-        className={
-          props.className + (!props.sticky ? " sticky top-0 z-50" : "") +
-          " tabs-boxed tabs !rounded-none !border-b max-[412px]:!py-1.5 !py-3 bg-white overflow-x-auto flex-shrink-0"
-        }
-      >
-        {props
-          .tabs!.filter((x) => x)
-          .map((x: any, i) => (
-            <h1
-              key={i}
-              onClick={() => handleTab(x)}
-              role="tab"
-              className={`${isValue == x.value && "font-semibold text-primary"} tab`}
-            >
-              {x.label}
-            </h1>
-          ))}
+      <div className="flex w-full items-center hide-scroll flex-shrink-0 overflow-x-auto overflow-y-hidden justify-evenly min-[460px]:rounded-lg border p-3">
+        {props?.tabs.map(x => (
+          <div
+            onClick={e => {
+              e.stopPropagation();
+              handleTab(x);
+            }}
+            className={cn(
+              'group relative w-auto cursor-pointer text-center text-[15px] flex-shrink-0 px-4',
+              isValue == x.value && 'font-semibold text-primary-500',
+              isValue != x.value && 'group-hover:text-primary-500'
+            )}
+          >
+            <div
+              className={cn(
+                'absolute inset-x-0 -bottom-2.5 mx-auto h-1 w-1/3 rounded-full',
+                isValue == x.value && 'bg-primary-500',
+                isValue != x.value && 'group-hover:bg-primary-500'
+              )}
+            />
+            <h1>{x.label}</h1>
+          </div>
+        ))}
       </div>
     </>
   );

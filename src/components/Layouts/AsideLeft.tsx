@@ -26,8 +26,8 @@ const DEFAULT_SIDE = [
   { icon: LuTrophy, label: 'Populer', href: '/populer' },
   { icon: LuBarChart2, label: 'Trending', href: '/trending' },
   { icon: LuSearch, label: 'Explore', href: '/explore' },
-  { icon: LuBell, label: 'Aktifitas', href: '/activity' },
-  { icon: LuSettings2, label: 'Settings', href: '/settings' },
+  // { icon: LuBell, label: 'Aktifitas', href: '/activity' },
+  // { icon: LuSettings2, label: 'Settings', href: '/settings' },
 ];
 
 const MORE_SIDE = [
@@ -44,13 +44,13 @@ const AsideLeft = () => {
   return (
     <>
       <aside className="hide-scroll sticky top-0 flex max-h-dvh min-w-[18rem] max-w-min flex-col gap-3 overflow-y-auto max-[1220px]:min-w-[16rem] max-[1168px]:min-w-min max-[590px]:hidden">
-        <div className="flex gap-4 rounded-xl border bg-white p-5 py-3.5 max-[1168px]:!p-3.5">
+        <Link href={user ? `/@${user?.username}` : ''} className="flex gap-4 rounded-xl border bg-white p-5 py-3.5 max-[1168px]:!p-3.5">
           <Image className="size-10 w-fit rounded-full" src={user?.picture} />
           <div className="flex flex-col text-[15px] max-[1168px]:hidden">
             <h1 className="line-clamp-1 font-bold">{user?.name ?? 'MeeFund'}</h1>
-            <Markdown className="line-clamp-2 text-sm">{user ? (user?.bio || 'Tidak ada bio') : 'Login untuk mengakses'}</Markdown>
+            <Markdown className="line-clamp-2 text-sm">{user ? user?.bio || 'Tidak ada bio' : 'Login untuk mengakses'}</Markdown>
           </div>
-        </div>
+        </Link>
         <div className="flex flex-col rounded-xl border bg-white">
           <div
             className={cn(

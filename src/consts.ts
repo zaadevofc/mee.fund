@@ -9,6 +9,7 @@ import {
   LuMedal,
   LuMonitorDot,
   LuPaintbrush,
+  LuPenTool,
   LuShare2,
   LuSmile
 } from "react-icons/lu";
@@ -91,12 +92,11 @@ export const POST_CATEGORY = [
   { icon: LuHome, label: "Beranda", href: "/" },
   { icon: LuBookMarked, label: "Pendidikan", href: "/pendidikan" },
   { icon: LuMonitorDot, label: "Coding", href: "/coding" },
-  { icon: LuAward, label: "Pameran", href: "/pameran" },
-  { icon: LuSmile, label: "Meme", href: "/meme" },
   { icon: LuShare2, label: "Sharing", href: "/sharing" },
+  { icon: LuAward, label: "Pameran", href: "/pameran" },
   { icon: LuAccessibility, label: "Tanya Sepuh", href: "/tanya-sepuh" },
-  { icon: LuGamepad2, label: "Gaming", href: "/gaming" },
+  { icon: LuSmile, label: "Meme", href: "/meme" },
+  { icon: LuPenTool, label: "Kata Kata", href: "/kata-kata" },
   { icon: LuPaintbrush, label: "Karya Seni", href: "/karya-seni" },
-  { icon: LuMedal, label: "Info Lomba", href: "/info-lomba" },
-  { icon: LuHotel, label: "Info Lowongan", href: "/info-lowongan" },
+  { icon: LuMedal, label: "Info Lomba", href: "/info-lomba" }
 ]

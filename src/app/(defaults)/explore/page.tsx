@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import Container from "~/components/Layouts/Container";
 import BackHeaderButton from "~/components/Layouts/HeaderButton";
 import TabOptions from "~/components/Layouts/HeaderTabs";
 import Wrapper from "~/components/Layouts/Wrapper";
@@ -17,7 +18,7 @@ const MemePage = () => {
 
   return (
     <>
-      <Wrapper>
+      <Container>
         <BackHeaderButton label="Pencarian" />
         <form>
           <label className="input input-md input-ghost !rounded-none flex items-center gap-2 !outline-none">
@@ -51,7 +52,7 @@ const MemePage = () => {
               ))}
           </div>
         </div>
-      </Wrapper>
+      </Container>
     </>
   );
 };

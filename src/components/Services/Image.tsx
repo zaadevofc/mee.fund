@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { HTMLAttributes, ImgHTMLAttributes } from 'react';
 import { default as NextImage } from 'next/image';
 
-const Image = (props: any) => {
+const Image = ({ ...props }: any) => {
   return (
     <>
       <NextImage

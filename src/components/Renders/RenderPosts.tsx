@@ -11,27 +11,27 @@ type RenderPostsType = {
   category?: getManyPostsType['category'];
   options?: FetchPostsType['options'];
   username?: string;
+  random?: boolean;
 };
 
 const RenderPosts = (props: RenderPostsType) => {
   const { data: user }: any = useSession();
-  const { data, isLoading } = usePosts({
+  const { data: postsData, isLoading: postsLoading } = usePosts({
     offset: 0,
     limit: 9999,
     request_id: user?.id ?? '',
     username: props.username,
     category: props.category,
     type: props.type,
+    random: props.random ? true : false,
   });
 
-  if (isLoading) return <ChildAlerts loading />;
-  if (!data?.data?.posts?.length) return <ChildAlerts label='Tidak ada postingan' />
+  if (postsLoading) return <ChildAlerts loading />;
+  if (!postsData?.data?.posts?.length) return <ChildAlerts label="Tidak ada postingan" />;
+
   return (
     <>
-      <div className="flex flex-col gap-3 max-[460px]:divide-y">{data?.data?.posts?.map((x: any) => (
-        <PostCard payload={x} />
-      ))}
-      </div>
+      <div className="flex flex-col gap-3">{postsData?.data.posts.map((x: any, i: any) => <PostCard key={i} payload={x} index={i} />)}</div>
     </>
   );
 };

@@ -6,7 +6,7 @@ const MainPage = () => {
   return (
     <>
       <Container>
-        <RenderPosts />
+        <RenderPosts random />
       </Container>
     </>
   );

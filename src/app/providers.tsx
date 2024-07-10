@@ -9,7 +9,7 @@ import { useSession } from 'next-auth/react';
 import NextTopLoader from 'nextjs-toploader';
 import { PrimeReactProvider } from 'primereact/api';
 import Tailwind from 'primereact/passthrough/tailwind';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useCallback, useState } from 'react';
 import { CONTEXT_DATA } from '~/libs/hooks';
 import Loading from './loading';
 
@@ -22,8 +22,13 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
   const [initTempPosts, setInitTempPosts] = useState<any>();
   const [initTempComments, setInitTempComments] = useState<any>();
   const [showAsideLeft, setShowAsideLeft] = useState(false);
+  const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
 
   const [showAuthModal, setAuthModal] = useState(false);
+
+  const setActiveVideo = useCallback((id: string | null) => {
+    setActiveVideoId(id);
+  }, []);
 
   const { status } = useSession();
   splitbee.init();
@@ -50,6 +55,8 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
             setShowAsideLeft,
             showAuthModal,
             setAuthModal,
+            activeVideoId,
+            setActiveVideo,
           }),
         }}
       >

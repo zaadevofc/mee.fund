@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { exclude } from '~/libs/tools';
+import { exclude, shuffleArray } from '~/libs/tools';
 import prisma from '~/prisma';
 import { MakeQueryError } from '../[[...route]]/route';
 import { USER_BASIC_SCHEMA } from "../users/users.service";
@@ -10,8 +10,9 @@ export type getManyPostsType = {
   id?: string;
   ids?: string;
   username?: string;
+  random?: boolean;
   request_id?: string;
-  type?: "random" | "reposts" | "likes" | "bookmarks" | undefined;
+  type?: "reposts" | "likes" | "bookmarks" | 'populer' | 'trending' | undefined;
   category?: Prisma.NestedEnumPOST_CATEGORYFilter['equals']
   options?: Prisma.PostFindManyArgs;
 }
@@ -35,6 +36,7 @@ export const POST_COUNT_BASIC_SCHEMA = {
 }
 
 export const POST_MEDIA_BASIC_SCHEMA = {
+  id: true,
   url: true,
   width: true,
   height: true,
@@ -90,7 +92,9 @@ export const getManyPosts = async (props: getManyPostsType) => {
     }));
 
     const hasMore = posts.length > limit
-    const result = hasMore ? posts.slice(0, -1) : posts
+
+    const parse = Boolean(props.random)? shuffleArray(posts) : posts
+    const result = hasMore ? parse.slice(0, -1) : parse
 
     return { posts: result, hasMore }
   } catch (e) {

@@ -7,6 +7,7 @@ import { createNewPostType, getManyPostsType, getPostDetailType } from '~/app/ap
 import { createNewCommentType, getManyCommentsType } from '~/app/api/v1/comments/comments.service';
 import { makeActionsType } from '~/app/api/v1/actions/actions.service';
 import { cache } from 'react';
+import { getManyTagsType } from '~/app/api/v1/tags/tags.service';
 
 export const BASE_URL_API = '/api/v1'
 const SecretKey = { secret: process.env.NEXT_PUBLIC_APIKEY! }
@@ -120,6 +121,8 @@ export type CONTEXT_DATAType = {
   setInitTempComments: (data: any) => any
   initSubmitType: { type: 'posts' | 'comments', post_id?: string; parent_id?: string }
   setInitSubmitType: (data: CONTEXT_DATAType['initSubmitType']) => any
+  activeVideoId: string | null;
+  setActiveVideo: (id: string | null) => void;
 }
 
 export const CONTEXT_DATA = (props?: CONTEXT_DATAType) => {
@@ -244,10 +247,26 @@ export const fetchAPi = async ([url, payload]: any) => {
   }).then((x) => x.json());
 }
 
-export const usePosts = (payload: getManyPostsType) => {
-  return useSWR([`/posts/${payload.ids || ''}`, payload], fetchAPi)
+type HookType = {
+  disabled?: boolean
 }
 
-export const useComments = (payload: getManyCommentsType) => {
-  return useSWR([`/posts/${payload.post_id || ''}/comments`, payload], fetchAPi)
+export const usePosts = (payload: getManyPostsType, opts?: HookType) => {
+  return useSWR(!opts?.disabled && [`/posts/${payload.ids || ''}`, payload], fetchAPi)
+}
+
+export const useComments = (payload: getManyCommentsType, opts?: HookType) => {
+  return useSWR(!opts?.disabled && [`/posts/${payload.post_id || ''}/comments`, payload], fetchAPi)
+}
+
+export const useTopTags = (payload: getManyTagsType, opts?: HookType) => {
+  return useSWR(!opts?.disabled && [`/tags/trending`, payload], fetchAPi)
+}
+
+export const useTopUsers = (payload: getManyUsersType, opts?: HookType) => {
+  return useSWR(!opts?.disabled && [`/users/suggestions`, payload], fetchAPi)
+}
+
+export const useUsers = (payload: getUserProfileType, opts?: HookType) => {
+  return useSWR(!opts?.disabled && [`/users/${payload.username || ''}`, payload], fetchAPi)
 }

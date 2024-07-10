@@ -3,17 +3,21 @@
 import { usePathname, useRouter } from 'next/navigation';
 import { DeferredContent } from 'primereact/deferredcontent';
 import { Galleria } from 'primereact/galleria';
-import { memo, ReactNode } from 'react';
+import { memo, ReactNode, useEffect, useRef } from 'react';
 import { GoComment, GoHeart, GoSync } from 'react-icons/go';
 import Image from '~/components/Services/Image';
 import Markdown from '~/components/Services/Markdown';
 import { cn } from '~/libs/tools';
 import ImageContainer from './ImageContainer';
+import Link from 'next/link';
 
 type PostCardType = {
   children?: ReactNode;
   asComment?: boolean;
+  index?: number;
+  className?: string;
   payload: any;
+  setRowHeight?: (index: number, height: number) => void;
 };
 
 const PostCard = memo((props: PostCardType) => {
@@ -21,6 +25,14 @@ const PostCard = memo((props: PostCardType) => {
   const path = usePathname();
 
   const isSelf = path.match(`/post/${props.payload?.ids}`);
+
+  const cardRef = useRef(null) as any;
+
+  useEffect(() => {
+    if (props.setRowHeight && cardRef.current) {
+      props.setRowHeight!(props.index!, cardRef.current.getBoundingClientRect().height);
+    }
+  }, [props.payload, props.setRowHeight!, props.index]);
 
   const handle = (e: any, action: void) => {
     e.stopPropagation();
@@ -36,20 +48,33 @@ const PostCard = memo((props: PostCardType) => {
   const Content = () => (
     <div className={cn('flex flex-col gap-3', !props.asComment ? 'text-[15px]' : 'text-[14px]')}>
       {props?.payload?.content && <Markdown text={props?.payload?.content} />}
-      <ImageContainer small={props.asComment} media={props?.payload?.media.map((x: any) => ({ src: x?.url, type: x?.mimetype }))} />
+      <ImageContainer
+        id={props.payload?.ids}
+        videoAutoPlay={!props.asComment}
+        small={props.asComment}
+        media={props?.payload?.media.map((x: any) => ({ src: x?.url, type: x?.mimetype }))}
+      />
     </div>
   );
 
   return (
     <>
       <div
+        ref={cardRef}
         onClick={e => !props.asComment && !isSelf && handle(e, router.push(`/post/${props.payload?.ids}`))}
-        className={cn('flex flex-col gap-3 pb-2 pt-4 min-[460px]:p-4 max-[460px]:px-3 min-[460px]:rounded-xl min-[460px]:border', isSelf ? 'p-4' : 'cursor-pointer', props.asComment && 'pb-2 pt-3 cursor-auto')}
+        className={cn(
+          'flex flex-col gap-3 pb-2 pt-4 max-[460px]:px-3 min-[460px]:rounded-xl min-[460px]:border min-[460px]:p-4',
+          isSelf ? 'p-4' : 'cursor-pointer',
+          props.asComment && 'cursor-auto pb-2 pt-3',
+          props.className
+        )}
       >
         <div className={cn('flex gap-3', !props.asComment && 'items-center')}>
           <Image className={cn('rounded-lg border', props.asComment ? 'size-8' : 'size-9')} src={props.payload?.user?.picture} />
           <div className={cn('flex flex-col text-sm', props.asComment && 'gap-0.5 text-[13px]')}>
-            <h1 className="font-bold">{props.payload?.user?.name}</h1>
+            <h1 onClick={e => handle(e, router.push(`/@${props.payload?.user?.username}`))} className="font-bold hover:underline">
+              {props.payload?.user?.name}
+            </h1>
             <p className={cn('text-xs text-secondary-300', !props.payload?.category && 'hidden')}>{props.payload?.category}</p>
             {props.asComment && <Content />}
           </div>
@@ -64,7 +89,9 @@ const PostCard = memo((props: PostCardType) => {
           ))}
         </div>
         {props.asComment && !!props.payload?.replies?.length && <button className="ml-10 w-fit bg-secondary-50 text-[13px]">Lihat balasan</button>}
-        <div className={cn('flex gap-2 rounded-lg border bg-secondary-50 p-2 mt-1', props.payload?.comments?.length == 0 && 'hidden', props.asComment && 'hidden')}>
+        <div
+          className={cn('mt-1 flex gap-2 rounded-lg border bg-secondary-50 p-2', props.payload?.comments?.length == 0 && 'hidden', props.asComment && 'hidden')}
+        >
           <Image className="size-8 rounded-lg border" src={props.payload?.comments?.[0]?.user?.picture} />
           <div className="flex flex-col text-sm">
             <h1 className="font-semibold">{props.payload?.comments?.[0]?.user?.name}</h1>

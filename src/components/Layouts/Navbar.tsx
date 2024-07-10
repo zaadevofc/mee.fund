@@ -50,7 +50,9 @@ const Navbar = () => {
           <button onClick={() => setAuthModal!(true)} className={cn('rounded-lg bg-primary-500 text-white', user && 'hidden')}>
             Masuk
           </button>
-          <Image className={cn('size-7 rounded-lg', !user && 'hidden')} src={user?.picture} />
+          <Link href={user ? `/@${user?.username}` : ''}>
+            <Image className={cn('size-8 rounded-lg', !user && 'hidden')} src={user?.picture} />
+          </Link>
         </div>
       </nav>
       <nav className="fixed bottom-0 z-50 w-full bg-white min-[590px]:hidden">

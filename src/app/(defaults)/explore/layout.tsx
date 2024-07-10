@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: `Pencarian`,
+  title: `Explore`,
 };
 
 export default function RootLayout({ children }: any) {

@@ -10,11 +10,11 @@ const HeaderButton = (props: HeaderButtonType) => {
 
   return (
     <>
-      <div className="flex items-center gap-4 p-2 max-[460px]:px-3 min-[460px]:rounded-xl min-[460px]:border w-fit">
-        <button className="border-none p-0" onClick={() => router.back()}>
+      <div className="flex items-center gap-4 mb-3 max-[460px]:px-3">
+        <button className="px-2 py-1 max-[460px]:border-none" onClick={() => router.back()}>
           <LuArrowLeft />
         </button>
-        {props.label && <h1 className="font-semibold">{props.label}</h1>}
+        {props.label && <h1 className="font-bold">{props.label}</h1>}
       </div>
     </>
   );

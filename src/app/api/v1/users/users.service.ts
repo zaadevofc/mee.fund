@@ -3,7 +3,9 @@ import prisma from "~/prisma"
 import { MakeError, MakeQueryError } from "../[[...route]]/route"
 import { exclude } from '~/libs/tools';
 
-export type getUserProfileType = ({ username: string } | { id: string }) & {
+export type getUserProfileType = {
+  id?: string
+  username?: string
   request_id?: string
   options?: Prisma.UserFindUniqueArgs;
 }
