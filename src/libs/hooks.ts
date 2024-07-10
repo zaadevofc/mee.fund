@@ -1,13 +1,14 @@
 import { Prisma } from '@prisma/client';
 import { QueryFunction, UndefinedInitialDataOptions, UseMutationOptions, useMutation, useQuery } from "@tanstack/react-query";
-import { exclude, signJWT } from "./tools";
-import useSWR from 'swr';
-import { getManyUsersType, getUserProfileType } from '~/app/api/v1/users/users.service';
-import { createNewPostType, getManyPostsType, getPostDetailType } from '~/app/api/v1/posts/posts.service';
-import { createNewCommentType, getManyCommentsType } from '~/app/api/v1/comments/comments.service';
-import { makeActionsType } from '~/app/api/v1/actions/actions.service';
 import { cache } from 'react';
+import useSWR from 'swr';
+import { makeActionsType } from '~/app/api/v1/actions/actions.service';
+import { createNewCommentType, getManyCommentsType } from '~/app/api/v1/comments/comments.service';
+import { createNewPostType, getManyPostsType, getPostDetailType } from '~/app/api/v1/posts/posts.service';
+import { MakeSearchType } from '~/app/api/v1/search/search.service';
 import { getManyTagsType } from '~/app/api/v1/tags/tags.service';
+import { getManyUsersType, getUserProfileType } from '~/app/api/v1/users/users.service';
+import { signJWT } from "./tools";
 
 export const BASE_URL_API = '/api/v1'
 const SecretKey = { secret: process.env.NEXT_PUBLIC_APIKEY! }
@@ -269,4 +270,8 @@ export const useTopUsers = (payload: getManyUsersType, opts?: HookType) => {
 
 export const useUsers = (payload: getUserProfileType, opts?: HookType) => {
   return useSWR(!opts?.disabled && [`/users/${payload.username || ''}`, payload], fetchAPi)
+}
+
+export const useSearch = (payload: MakeSearchType, opts?: HookType) => {
+  return useSWR(!opts?.disabled && [`/search`, payload], fetchAPi)
 }

@@ -3,8 +3,8 @@ import { MakeError, MakeQueryError } from "../[[...route]]/route"
 import prisma from '~/prisma';
 
 export type getManyTagsType = {
-  limit: number;
-  offset: number;
+  limit?: number;
+  offset?: number;
   options?: Prisma.TagFindManyArgs;
 }
 

@@ -27,18 +27,18 @@ const ImageContainer = (props: ImageContainerType) => {
     // { src: '/posts-2.jpg', type: 'image/webp' },
   ];
 
-  const IMGL = temp.length || props?.media?.length || 0;
+  const IMGL = props?.media?.length || 0;
   if (IMGL === 0) return null;
 
   return (
     <PhotoProvider maskOpacity={0.9} className={cn(IMGL == 0 && 'hidden')}>
       <ScrollContainer className={cn(`flex gap-0.5 overflow-x-auto`, props.className)}>
-        {temp?.map((x: any, i) => (
+        {props?.media?.map((x: any, i) => (
           <div
             key={i}
             onClick={e => e.stopPropagation()}
             className={cn(
-              `relative flex-shrink-0 cursor-grab w-full overflow-hidden rounded-lg border active:scale-[.94] active:cursor-grabbing`,
+              `relative w-full flex-shrink-0 cursor-grab overflow-hidden rounded-lg border active:scale-[.94] active:cursor-grabbing`,
               props.small ? 'max-h-[50dvh]' : 'max-h-[70dvh]',
               IMGL > 1 && (props.small ? 'max-h-[40dvh]' : 'max-h-[50dvh]'),
               IMGL > 3 && (props.small ? 'max-h-[30dvh]' : 'max-h-[40dvh]')

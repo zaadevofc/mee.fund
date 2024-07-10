@@ -1,23 +1,25 @@
 import { Hono } from 'hono';
 import { bearerAuth } from 'hono/bearer-auth';
-import { csrf } from 'hono/csrf';
 import { cors } from 'hono/cors';
 import { etag } from 'hono/etag';
 import { prettyJSON } from 'hono/pretty-json';
 import { secureHeaders } from 'hono/secure-headers';
 import { handle } from 'hono/vercel';
+import NodeCache from 'node-cache';
+import { SEO } from '~/consts';
 import { compareArrays, parseObj, stringObj, verifyJWT } from '~/libs/tools';
 import { ActionsController } from '../actions/actions.controller';
 import { CommentsController } from '../comments/comments.controller';
+import { MediaController } from '../media/media.controller';
 import { PostsController } from '../posts/posts.controller';
+import { SearchController } from '../search/search.controller';
 import { TagsController } from '../tags/tags.controller';
 import { UserController } from '../users/users.controller';
-import { MediaController } from '../media/media.controller';
-import { SEO } from '~/consts';
 
 const app = new Hono<{ Variables: any }>().basePath('/api/v1')
 const baseUrl = (c: any) => c.req.raw.nextUrl.origin + '/';
 
+export const cache = new NodeCache({ stdTTL: 300 });
 export const MakeError = (code: number, error: string, cause: string) => { throw Error(stringObj({ code, error, cause })) }
 export const MakeQueryError = () => MakeError(500, 'INTERNAL_SERVER_ERROR', 'Terjadi kesalahan query dari sistem.')
 
@@ -59,7 +61,6 @@ app.use('*',
     c.set('payload', res)
     c.set('validate', (keys: string[]) => {
       const check = compareArrays(keys, Object.keys(res))
-      console.log("🚀 ~ res:", res)
       if (!check) return MakeQueryError()
       return false
     })
@@ -82,6 +83,7 @@ app.route('/comments', CommentsController)
 app.route('/tags', TagsController)
 app.route('/actions', ActionsController)
 app.route('/media', MediaController)
+app.route('/search', SearchController)
 
 export const GET = handle(app)
 export const POST = handle(app)

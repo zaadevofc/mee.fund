@@ -13,6 +13,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
     };
 
   const res = await cache(async () => await getUserProfile({ username: user.substring(1) }))() as any;
+  console.log("🚀 ~ generateMetadata ~ res:", res)
 
   if (!res) return {};
 

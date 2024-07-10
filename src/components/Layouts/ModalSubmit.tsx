@@ -2,18 +2,13 @@
 
 import { MutateOptions } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
-import dynamic from 'next/dynamic';
-import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { memo, useCallback, useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { LuBadgeCheck, LuImagePlus, LuListChecks, LuMic } from 'react-icons/lu';
+import { LuFilePlus } from 'react-icons/lu';
 import { SystemContext } from '~/app/providers';
-import { POST_CATEGORY } from '~/consts';
 import { postMedia } from '~/libs/hooks';
 import { extractTags } from '~/libs/tools';
-import Image from '../Services/Image';
-
-const TextareaAutosize = dynamic(() => import('react-textarea-autosize'), { ssr: false });
-const ImageContainer = dynamic(() => import('../Services/ImageContainer'), { ssr: false });
 
 const bytesImport = import('bytes').then(mod => mod.default);
 const keygenImport = import('keygen').then(mod => mod.default);
@@ -205,7 +200,8 @@ const ModalSubmit = memo(() => {
       if (isMediaList.length >= 5) return toast.error('Maksimal 5 hanya media!');
 
       bytesImport.then(bytes => {
-        if (Number(bytes(isMediaList.reduce((a, b: any) => a + b.file.size, 0))) > Number(bytes('20MB'))) return toast.error('Media tidak boleh lebih dari 20MB!');
+        if (Number(bytes(isMediaList.reduce((a, b: any) => a + b.file.size, 0))) > Number(bytes('20MB')))
+          return toast.error('Media tidak boleh lebih dari 20MB!');
 
         for (const f of e.target.files) {
           const file = f;
@@ -228,87 +224,14 @@ const ModalSubmit = memo(() => {
     setCanWrite(true);
   }, [initSubmitType]);
 
-  const memoizedImageContainer = useMemo(
-    () => (
-      <ImageContainer
-        triggers={['onDoubleClick']}
-        media={isMediaList.filter(x => x != '-').map((x: any) => ({ src: x.url, type: x.file.type }))}
-        onMediaClick={(x: any, i) => {
-          !isLoading && user && setMediaList(f => f.filter((y: any) => y.url != x.src));
-        }}
-      />
-    ),
-    [isMediaList, isLoading, user]
-  );
-
   return (
     <>
-      <input type="checkbox" id="make_post_modal" className="modal-toggle" />
-      <div className="modal" role="dialog">
-        <div className="hide-scroll modal-box">
-          <div className="relative flex items-start gap-3">
-            <Image src={user?.picture} className="size-9 rounded-full" />
-            <div className="flex w-full flex-col gap-0.5">
-              <div className="flex items-center gap-1">
-                <div className="flex items-center gap-1">
-                  <span className="font-bold">{user?.name ?? 'MeeFund'}</span>
-                  <LuBadgeCheck className={`${!user?.is_verified && 'hidden'} flex-shrink-0 fill-primary text-lg text-white`} />
-                </div>
-              </div>
-              <div className="flex flex-col gap-3">
-                <TextareaAutosize
-                  id="textinput"
-                  {...(!isCanWrite && { value: '' })}
-                  disabled={isLoading || !user}
-                  placeholder={textLabeling[initSubmitType?.type!]?.placeholder}
-                  className="bg-transparent"
-                />
-                {memoizedImageContainer}
-                <div className={`${!isMediaList.length && 'hidden'} flex w-full items-center justify-between`}>
-                  <span className="text-sm text-gray-500">
-                    {isMediaList.length}
-                    <span className="font-semibold">/5 Files</span>
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    {/* Implement total_size calculation here */}
-                    <span className="font-semibold">/20MB</span>
-                  </span>
-                </div>
-              </div>
-
-              <div className="mt-5 flex items-center gap-3 [&_svg]:text-xl">
-                <input onChange={handleMedia} multiple type="file" accept="image/*, video/*" id="file_upload" className="hidden" disabled={isLoading || !user} />
-                <label htmlFor="file_upload" className="text-shade-0 hover:text-shade flex-shrink-0 cursor-pointer">
-                  <LuImagePlus />
-                </label>
-                <LuMic className="flex-shrink-0 !cursor-not-allowed !opacity-20" />
-                <LuListChecks className="flex-shrink-0 !cursor-not-allowed !opacity-20" />
-                <select
-                  value={isCategory}
-                  disabled={isLoading || !user}
-                  onChange={e => !isLoading && user && setCategory(e.target.value)}
-                  className={`${initSubmitType?.type == 'posts' && '!block'} select select-bordered select-xs ml-auto hidden max-w-xs flex-shrink-0`}
-                >
-                  <option value={''} disabled selected>
-                    Pilih Kategori
-                  </option>
-                  {POST_CATEGORY.map(
-                    (x, i) =>
-                      i > 0 && (
-                        <option key={i} value={x.label.replaceAll(' ', '_').toUpperCase()}>
-                          {x.label}
-                        </option>
-                      )
-                  )}
-                </select>
-                <button disabled={isLoading || !user} onClick={handlePrepare} className="btn btn-primary btn-sm ml-auto flex-shrink-0">
-                  {textLabeling[initSubmitType?.type!]?.['actionLabel']}
-                </button>
-              </div>
-            </div>
-          </div>
+      <div className="flex flex-col gap-3">
+        <h1 className='text-lg font-semibold'>{initSubmitType?.type == 'posts' ? 'Buat postingan baru' : 'Berikan komentar'}</h1>
+        <InputTextarea autoResize placeholder='Dapat hal seru di mulai dari kamu!' className='!p-0 leading-[21px]' />
+        <div className='flex items-center gap-4'>
+          <LuFilePlus className='text-xl flex-shrink-0' />
         </div>
-        <label className="modal-backdrop" htmlFor="make_post_modal"></label>
       </div>
     </>
   );

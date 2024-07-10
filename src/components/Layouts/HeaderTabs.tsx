@@ -3,6 +3,7 @@ import { cn } from '~/libs/utils';
 
 export type HeaderTabsType = {
   className?: string;
+  value?: string;
   sticky?: boolean;
   tabs: {
     label: string;
@@ -12,7 +13,7 @@ export type HeaderTabsType = {
 };
 
 const HeaderTabs = (props: HeaderTabsType) => {
-  const [isValue, setValue] = useState(props.tabs[0] && props.tabs[0].value);
+  const [isValue, setValue] = useState(props.value || props.tabs[0] && props.tabs[0].value);
 
   const handleTab = (x: any) => {
     setValue(x.value);
@@ -23,7 +24,7 @@ const HeaderTabs = (props: HeaderTabsType) => {
 
   return (
     <>
-      <div className="flex w-full items-center hide-scroll flex-shrink-0 overflow-x-auto overflow-y-hidden justify-evenly min-[460px]:rounded-lg border p-3">
+      <div className={cn("flex w-full items-center hide-scroll flex-shrink-0 overflow-x-auto overflow-y-hidden justify-evenly min-[460px]:rounded-lg border p-3", props.className)}>
         {props?.tabs.map(x => (
           <div
             onClick={e => {

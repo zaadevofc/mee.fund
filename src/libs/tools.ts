@@ -5,6 +5,7 @@ import DayJSCalendar from "dayjs/plugin/calendar"
 import DayJSUpdateLocale from 'dayjs/plugin/updateLocale'
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { useSearchParams } from 'next/navigation';
 
 DayJS.locale('id')
 DayJS.extend(DayJSCalendar)
@@ -73,6 +74,23 @@ export const extractTags = (tag: string, text: string): string[] => {
   const rgx = new RegExp(`${escapedTag}([\\w\\u0590-\\u05ff]+)`, 'gi')
   return text.match(rgx)?.map(tag => tag.slice(1)) || []
 }
+
+export const updateParams = (search: any, ...params: any[]) => {
+  const update = new URLSearchParams(search);
+
+  for (let i = 0; i < params.length; i += 2) {
+    const key = params[i];
+    const value = params[i + 1];
+    if (value !== undefined) {
+      if (update.has(key)) {
+        update.delete(key);
+      }
+      update.set(key, value);
+    }
+  }
+
+  return `?${update.toString()}`
+};
 
 export const signJWT = async (payload = {}, exp = 50): Promise<string | false> => {
   try {

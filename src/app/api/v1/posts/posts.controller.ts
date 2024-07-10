@@ -1,9 +1,8 @@
 import { Prisma } from '@prisma/client';
-import { Hono } from "hono"
-import { getManyComments } from "../comments/comments.service"
-import { createNewPost, getManyPosts, getPostDetail } from "./posts.service"
-import { MakeError } from "../[[...route]]/route"
-import { shuffleArray } from "~/libs/tools"
+import { Hono } from "hono";
+import { MakeError } from "../[[...route]]/route";
+import { getManyComments } from "../comments/comments.service";
+import { createNewPost, getManyPosts, getPostDetail } from "./posts.service";
 
 const app = new Hono<{ Variables: any }>()
 
@@ -130,4 +129,5 @@ app.get('/:id/comments', async (c) => {
   }
 })
 
-export { app as PostsController }
+export { app as PostsController };
+

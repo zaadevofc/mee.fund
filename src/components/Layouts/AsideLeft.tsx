@@ -20,6 +20,9 @@ import Image from '~/components/Services/Image';
 import { cn } from '~/libs/tools';
 import Markdown from '../Services/Markdown';
 import { POST_CATEGORY } from '~/consts';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { InputTextarea } from 'primereact/inputtextarea';
+import ModalSubmit from './ModalSubmit';
 
 const DEFAULT_SIDE = [
   { icon: LuHome, label: 'Beranda', href: '/' },
@@ -51,17 +54,24 @@ const AsideLeft = () => {
             <Markdown className="line-clamp-2 text-sm">{user ? user?.bio || 'Tidak ada bio' : 'Login untuk mengakses'}</Markdown>
           </div>
         </Link>
-        <div className="flex flex-col rounded-xl border bg-white">
-          <div
-            className={cn(
-              `group flex cursor-pointer items-center gap-3 px-6 py-3.5 font-medium active:scale-[.95]`,
-              'hover:text-primary-500 [&_svg]:hover:stroke-primary-500'
-            )}
-          >
-            <LuPlusCircle className="flex-shrink-0 text-xl text-secondary-400" />
-            <h1 className="text-[15px] max-[1168px]:hidden">Buat Postingan</h1>
-          </div>
-        </div>
+        <Dialog>
+          <DialogTrigger className='p-0 border-none'>
+            <div className="flex flex-col rounded-xl border bg-white">
+              <div
+                className={cn(
+                  `group flex cursor-pointer items-center gap-3 px-6 py-3.5 font-medium active:scale-[.95]`,
+                  'hover:text-primary-500 [&_svg]:hover:stroke-primary-500'
+                )}
+              >
+                <LuPlusCircle className="flex-shrink-0 text-xl text-secondary-400" />
+                <h1 className="text-[15px] max-[1168px]:hidden">Buat Postingan</h1>
+              </div>
+            </div>
+          </DialogTrigger>
+          <DialogContent className='rounded-lg max-[460px]:h-dvh'>
+            <ModalSubmit />
+          </DialogContent>
+        </Dialog>
         <div className="flex flex-col rounded-xl border bg-white">
           {DEFAULT_SIDE.map((x, i) => (
             <Link
