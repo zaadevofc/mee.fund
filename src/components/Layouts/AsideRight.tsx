@@ -7,6 +7,7 @@ import { cn } from '~/libs/tools';
 import Markdown from '../Services/Markdown';
 import ChildAlerts from '../Services/ChildAlerts';
 import { useWindowWidth } from '@react-hook/window-size';
+import { LuBadgeCheck } from 'react-icons/lu';
 
 const AsideRight = () => {
   const windowWidth = useWindowWidth();
@@ -48,7 +49,10 @@ const AsideRight = () => {
             <Link href={`/@${x?.username}`} className="group flex gap-3 p-5 py-3.5">
               <Image className="size-10 rounded-full border group-hover:rounded-lg" src={x?.picture} />
               <div className="flex flex-col text-[15px]">
-                <h1 className="font-bold group-hover:text-primary-500">{x?.name}</h1>
+                <div className="flex items-center">
+                  <h1 className="font-bold group-hover:text-primary-500">{x?.name}</h1>
+                  {x.is_verified && <LuBadgeCheck className="fill-sky-500 stroke-white text-lg" />}
+                </div>
                 <Markdown className="line-clamp-2 text-sm" text={x?.bio || `@${x?.username}`} />
               </div>
             </Link>

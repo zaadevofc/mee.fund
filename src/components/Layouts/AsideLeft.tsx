@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
+  LuBadgeCheck,
   LuBarChart2,
   LuBell,
   LuFastForward,
@@ -50,12 +51,15 @@ const AsideLeft = () => {
         <Link href={user ? `/@${user?.username}` : ''} className="flex gap-4 rounded-xl border bg-white p-5 py-3.5 max-[1168px]:!p-3.5">
           <Image className="size-10 w-fit rounded-full" src={user?.picture} />
           <div className="flex flex-col text-[15px] max-[1168px]:hidden">
-            <h1 className="line-clamp-1 font-bold">{user?.name ?? 'MeeFund'}</h1>
+            <div className="flex items-center">
+              <h1 className="line-clamp-1 font-bold">{user?.name ?? 'MeeFund'}</h1>
+              {user?.is_verified && <LuBadgeCheck className="fill-sky-500 stroke-white text-lg" />}
+            </div>
             <Markdown className="line-clamp-2 text-sm">{user ? user?.bio || 'Tidak ada bio' : 'Login untuk mengakses'}</Markdown>
           </div>
         </Link>
         <Dialog>
-          <DialogTrigger className='p-0 border-none'>
+          <DialogTrigger className="border-none p-0">
             <div className="flex flex-col rounded-xl border bg-white">
               <div
                 className={cn(
@@ -68,8 +72,8 @@ const AsideLeft = () => {
               </div>
             </div>
           </DialogTrigger>
-          <DialogContent className='rounded-lg max-[460px]:h-dvh'>
-            <ModalSubmit />
+          <DialogContent className="rounded-lg max-[460px]:h-dvh">
+            <ModalSubmit type="posts" />
           </DialogContent>
         </Dialog>
         <div className="flex flex-col rounded-xl border bg-white">

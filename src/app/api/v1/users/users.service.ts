@@ -18,9 +18,11 @@ export type getManyUsersType = {
 
 export const USER_BASIC_SCHEMA = {
   name: true,
+  role: true,
   username: true,
   is_verified: true,
   picture: true,
+  visibility: true,
   bio: true,
 }
 
@@ -80,6 +82,20 @@ export const getUserProfile = async (props: getUserProfileType) => {
     return profile?.[0];
   } catch (e) {
     console.log("🚀 ~ getUserProfile ~ e:", e)
+    MakeQueryError()
+  }
+}
+
+export type editUserProfileType = {
+  opts: Prisma.UserUpdateArgs
+}
+
+export const editUserProfile = async (props: editUserProfileType) => {
+  try {
+    const edit = await prisma.user.update(props.opts)
+    return edit
+  } catch (e) {
+    console.log("🚀 ~ editUserProfile ~ e:", e)
     MakeQueryError()
   }
 }

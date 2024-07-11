@@ -3,28 +3,23 @@
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import {
   LuBarChart2,
   LuBell,
-  LuFastForward,
-  LuHelpCircle,
   LuHome,
-  LuLaptop,
   LuPlusCircle,
   LuSearch,
   LuSettings2,
-  LuShieldCheck,
   LuTrophy,
+  LuUser2
 } from 'react-icons/lu';
 import { SystemContext } from '~/app/providers';
+import { cn } from '~/libs/tools';
 import Brands from '../Services/Brands';
 import Image from '../Services/Image';
-import { BlockUI } from 'primereact/blockui';
-import { cn } from '~/libs/tools';
-import { Button } from 'primereact/button';
-import { Dialog } from 'primereact/dialog';
-import { Sidebar } from 'primereact/sidebar';
+import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
+import ModalSubmit from './ModalSubmit';
 
 const Navbar = () => {
   const { data: user }: any = useSession();
@@ -38,8 +33,7 @@ const Navbar = () => {
     { icon: LuTrophy, label: 'Populer', href: '/populer' },
     { icon: LuBarChart2, label: 'Trending', href: '/trending' },
     { icon: LuSearch, label: 'Explore', href: '/explore' },
-    { icon: LuBell, label: 'Aktifitas', href: '/activity' },
-    { icon: LuSettings2, label: 'Settings', href: '/settings' },
+    { icon: LuUser2, label: 'Profile', href: `/@${user?.username}` },
   ];
 
   return (
@@ -50,14 +44,19 @@ const Navbar = () => {
           <button onClick={() => setAuthModal!(true)} className={cn('rounded-lg bg-primary-500 text-white', user && 'hidden')}>
             Masuk
           </button>
-          <Link href={user ? `/@${user?.username}` : ''}>
-            <Image className={cn('size-8 rounded-lg', !user && 'hidden')} src={user?.picture} />
-          </Link>
+          <Dialog>
+            <DialogTrigger className={cn("border-none p-0 min-[590px]:hidden", !user && 'hidden')}>
+              <LuPlusCircle className="flex-shrink-0 text-2xl text-secondary-400" />
+            </DialogTrigger>
+            <DialogContent className="rounded-lg max-[460px]:h-dvh">
+              <ModalSubmit type="posts" />
+            </DialogContent>
+          </Dialog>
         </div>
       </nav>
       <nav className="fixed bottom-0 z-50 w-full bg-white min-[590px]:hidden">
         <div className="flex w-full items-center justify-between border-t p-2 px-5">
-          {DEFAULT_SIDE.slice(0, -1).map(x => (
+          {DEFAULT_SIDE.slice(0, user ? 5 : 4).map(x => (
             <Link
               key={x.label}
               href={x.href}

@@ -10,6 +10,8 @@ import Markdown from '~/components/Services/Markdown';
 import { cn } from '~/libs/tools';
 import ImageContainer from './ImageContainer';
 import Link from 'next/link';
+import { LuBadgeCheck } from 'react-icons/lu';
+import { Badge } from '../ui/badge';
 
 type PostCardType = {
   children?: ReactNode;
@@ -71,11 +73,14 @@ const PostCard = memo((props: PostCardType) => {
       >
         <div className={cn('flex gap-3', !props.asComment && 'items-center')}>
           <Image className={cn('rounded-lg border', props.asComment ? 'size-8' : 'size-9')} src={props.payload?.user?.picture} />
-          <div className={cn('flex flex-col text-sm', props.asComment && 'gap-0.5 text-[13px]')}>
-            <h1 onClick={e => handle(e, router.push(`/@${props.payload?.user?.username}`))} className="font-bold hover:underline">
-              {props.payload?.user?.name}
-            </h1>
-            <p className={cn('text-xs text-secondary-300', !props.payload?.category && 'hidden')}>{props.payload?.category}</p>
+          <div className={cn('flex flex-col text-sm w-full', props.asComment && 'gap-0.5 text-[13px]')}>
+            <div className="flex w-full items-center">
+              <h1 onClick={e => handle(e, router.push(`/@${props.payload?.user?.username}`))} className="font-bold hover:underline">
+                {props.payload?.user?.name}
+              </h1>
+              {props.payload?.user?.is_verified && <LuBadgeCheck className="fill-sky-500 stroke-white text-lg" />}
+            </div>
+            <p className={cn('text-xs text-secondary-300', !props.payload?.category && 'hidden')}>{props.payload?.category?.replaceAll('_', ' ')}</p>
             {props.asComment && <Content />}
           </div>
         </div>
@@ -94,7 +99,12 @@ const PostCard = memo((props: PostCardType) => {
         >
           <Image className="size-8 rounded-lg border" src={props.payload?.comments?.[0]?.user?.picture} />
           <div className="flex flex-col text-sm">
-            <h1 className="font-semibold">{props.payload?.comments?.[0]?.user?.name}</h1>
+            <div className="flex items-center">
+              <h1 onClick={e => handle(e, router.push(`/@${props.payload?.comments?.[0]?.user?.username}`))} className="font-bold hover:underline">
+                {props.payload?.comments?.[0]?.user?.name}
+              </h1>
+              {props.payload?.comments?.[0]?.user?.is_verified && <LuBadgeCheck className="fill-sky-500 stroke-white text-lg" />}
+            </div>
             <Markdown className="line-clamp-2 leading-[17px]" text={props.payload?.comments?.[0]?.content} />
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { exclude } from "~/libs/tools";
-import { MakeError } from "../[[...route]]/route";
-import { getManyUsers, getUserProfile } from "./users.service";
+import { MakeError, MakeQueryError } from "../[[...route]]/route";
+import { editUserProfile, getManyUsers, getUserProfile } from "./users.service";
 
 const app = new Hono<{ Variables: any }>()
 
@@ -21,6 +21,23 @@ app.get('/suggestions', async (c) => {
 
     return c.json({ data: suggests })
   } catch (error: any) {
+    return c.get('ParseError')(error)
+  }
+})
+
+app.post('/edit', async (c) => {
+  try {
+    const check = c.get('validate')(['payload'])
+    if (check) return check;
+
+    const { payload } = c.get('payload')
+    const profile = await editUserProfile({ opts: payload })
+
+    if (!profile) MakeQueryError()
+    return c.json({ data: exclude(profile, ['email']) })
+
+  } catch (error: any) {
+    console.log("🚀 ~ app.get ~ error:", error)
     return c.get('ParseError')(error)
   }
 })

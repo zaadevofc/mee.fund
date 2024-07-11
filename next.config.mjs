@@ -40,6 +40,7 @@ const nextConfig = {
       { hostname: 'ucarecdn.com' },
       { hostname: 'pchzoarnvyxkimkkfxcc.supabase.co' },
       { hostname: 'yrmnzileroexrdtkcyvd.supabase.co' },
+      { hostname: 'yrmnzileroexrdtkcyvd.supabase.co' },
     ],
   },
   async headers() {
