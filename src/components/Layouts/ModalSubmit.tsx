@@ -14,14 +14,11 @@ import ImageContainer from '../Services/ImageContainer';
 import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 
-import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
-
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
-
-const bytesImport = import('bytes').then(mod => mod.default);
-const keygenImport = import('keygen').then(mod => mod.default);
-const mimeImport = import('mime-types').then(mod => mod.default);
+import { postMedia } from '~/libs/hooks';
+import bytes from 'bytes';
+import keygen from 'keygen';
+import mime from 'mime-types';
 
 const textLabeling = {
   posts: {
@@ -75,10 +72,6 @@ const ModalSubmit = memo(() => {
     setSubmitFinish!(false);
     if (!user) return;
 
-    const bytes = await bytesImport;
-    const keygen = await keygenImport;
-    const mime = await mimeImport;
-
     let media = [];
     let content = (globalThis as any)?.textinput.value;
     let payload = {
@@ -101,17 +94,14 @@ const ModalSubmit = memo(() => {
         if (file.size > Number(bytes('50MB'))) return;
         if (!/^image|video/.test(file.type)) return;
         if (!/^image|video/.test(mime.lookup(file.name).toString())) return;
+        const init = await postMedia(file, showSubmitModal?.type!);
 
-        const { data, error } = await supabase.storage.from(showSubmitModal?.type!).upload(keygen.url(12), file, {
-          cacheControl: '99999',
-          upsert: false,
-        });
         const config = {
-          url: process.env.NEXT_PUBLIC_SUPABASE_URL! + '/storage/v1/object/public/' + data?.fullPath,
+          url: init?.data?.url,
           format: '.' + mime.extension(file.type).toString(),
           mimetype: file.type,
           file_name: file.name,
-          file_id: data?.id,
+          file_id: keygen.url(12),
           long_size: file.size,
           short_size: bytes(file.size),
           metadata: {
@@ -209,23 +199,19 @@ const ModalSubmit = memo(() => {
     (e: any) => {
       if (isMediaList.length >= 5) return toast.error('Maksimal 5 hanya media!');
 
-      bytesImport.then(bytes => {
-        if (Number(bytes(isMediaList.reduce((a, b: any) => a + b.file.size, 0))) > Number(bytes('50MB')))
-          return toast.error('Media tidak boleh lebih dari 20MB!');
+      if (Number(bytes(isMediaList.reduce((a, b: any) => a + b.file.size, 0))) > Number(bytes('50MB')))
+        return toast.error('Media tidak boleh lebih dari 20MB!');
 
-        for (const f of e.target.files) {
-          const file = f;
-          if (file.size > Number(bytes('50MB'))) return toast.error('Media tidak boleh lebih dari 20MB!');
-          if (!/^image|video/.test(file.type)) return;
+      for (const f of e.target.files) {
+        const file = f;
+        if (file.size > Number(bytes('50MB'))) return toast.error('Media tidak boleh lebih dari 20MB!');
+        if (!/^image|video/.test(file.type)) return;
 
-          mimeImport.then(mime => {
-            if (!/^image|video/.test(mime.lookup(file.name).toString())) return;
+        if (!/^image|video/.test(mime.lookup(file.name).toString())) return;
 
-            let parse = URL.createObjectURL(f);
-            setMediaList((x: any) => [...x, { file: f, url: parse }].slice(0, 5) as any);
-          });
-        }
-      });
+        let parse = URL.createObjectURL(f);
+        setMediaList((x: any) => [...x, { file: f, url: parse }].slice(0, 5) as any);
+      }
     },
     [isMediaList]
   );
@@ -244,7 +230,7 @@ const ModalSubmit = memo(() => {
   return (
     <>
       <Dialog open={showSubmitModal?.open} onOpenChange={x => setSubmitModal!((p: any) => ({ ...p, open: x }))}>
-        <DialogContent className='rounded-lg max-[460px]:h-dvh'>
+        <DialogContent className="rounded-lg max-[460px]:h-dvh">
           <div className="flex flex-col gap-3">
             <h1 className="text-lg font-semibold">{showSubmitModal?.type == 'posts' ? 'Buat postingan baru' : 'Berikan komentar'}</h1>
             <div className="flex flex-col gap-2">

@@ -1,11 +1,10 @@
-import { default as DayJS } from 'dayjs'
+import { clsx, type ClassValue } from "clsx";
+import { default as DayJS } from 'dayjs';
+import 'dayjs/locale/id';
+import DayJSCalendar from "dayjs/plugin/calendar";
+import DayJSUpdateLocale from 'dayjs/plugin/updateLocale';
 import { sign, verify } from "hono/jwt";
-import 'dayjs/locale/id'
-import DayJSCalendar from "dayjs/plugin/calendar"
-import DayJSUpdateLocale from 'dayjs/plugin/updateLocale'
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-import { useSearchParams } from 'next/navigation';
+import { twMerge } from "tailwind-merge";
 
 DayJS.locale('id')
 DayJS.extend(DayJSCalendar)
@@ -24,7 +23,6 @@ DayJS.updateLocale('id', {
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
 }
-
 
 export const dayjs = DayJS
 

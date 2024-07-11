@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## MeeFund - Komunitas kreatif yang penuh inovasi dan hiburan terbaik mu!
 
-## Getting Started
+Panggung buat ide-idemu yang paling gokil. Mulai dari proyek kreatif, inovasi, sampai hiburan seru, semua bisa dapat tempat di MeeFund. Jadi, tunggu apa lagi? Saatnya unjuk gigi!
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+> Proyek ini dibuat untuk perlombaan Web Development **SILOGY EXPO 2024**
+
+Dengan mengangkat tema Teknologi dan Pendidikan Kami **Tim Twoza Creative** membuat Komunitas Online yang orang lain dapat memberi informasi, menginformasi bahkan memberi hiburan.
+
+### Tanggal Start
+Diperkirakan pada 17 Juni 2024
+
+### Konfigurasi
+
+```MD
+# POSTGRESQL
+DATABASE_URL=""
+
+# KREDENSIAL RESMI
+AUTH_GOOGLE_ID=""
+AUTH_GOOGLE_SECRET=""
+
+# KREDENSIAL RESMI
+AUTH_GITHUB_ID=""
+AUTH_GITHUB_SECRET=""
+
+# KREDENSIAL RESMI
+AUTH_DISCORD_ID=""
+AUTH_DISCORD_SECRET=""
+
+# SESUAIKAN DENGAN URL
+NEXTAUTH_URL=""
+
+# RANDOM
+NEXTAUTH_SECRET=""
+
+# RANDOM
+NEXT_PUBLIC_JWT_TOKEN=""
+NEXT_PUBLIC_APIKEY=""
+
+# RANDOM
+SESSION_NAME=""
+
+# FILE HOSTING URL
+HOST_UPLOAD_URL=""
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Instalasi
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Setelah selesai konfigurasi Anda dapat menjalankan perintah :
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+$ pnpm i
+$ pnpm dlx prisma db push
+$ npm run dev
+```
 
-## Learn More
+## Support
 
-To learn more about Next.js, take a look at the following resources:
+Ini merupakan project open source yang di lindungi [MIT License]()
+Hubungi email [zaadevofc@gmail.com](mailto:zaadevofc@gmail.com) jika sewaktu - waktu ada kendala.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Privacy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Kunjungi [MeeFund Privacy Policy](https://mee.fund/~/privacy)
