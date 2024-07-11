@@ -8,8 +8,12 @@ Panggung buat ide-idemu yang paling gokil. Mulai dari proyek kreatif, inovasi, s
 
 Dengan mengangkat tema Teknologi dan Pendidikan Kami **Tim Twoza Creative** membuat Komunitas Online yang orang lain dapat memberi informasi, menginformasi bahkan memberi hiburan.
 
-### Tanggal Start
-Diperkirakan pada 17 Juni 2024
+Sayangnya karna waktu yang kurang, proyek ini belum selesai di kerjakan sepenuhnya karna di tambah kesibukan di hari libur. Tetapi kami tetap mengumpulkan seadanya dengan mengutamakan fungsionalitas.
+
+Kami tetap melanjutkan proyek ini hingga finish walaupun source yang di kumpulkan adalah source yang belum tuntas.
+
+#### Tanggal Start
+Diperkirakan pada, 17 Juni 2024
 
 ### Konfigurasi
 

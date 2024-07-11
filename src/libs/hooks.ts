@@ -33,10 +33,9 @@ export const postMedia = async (file: File, bucket: string) => {
 
   const formData = new FormData()
   formData.append('file', file)
-  formData.append('bucket', bucket)
   formData.append('token', auth.toString())
 
-  return await fetch(process.env.NEXT_PUBLIC_HOST_UPLOAD_URL!, {
+  return await fetch(process.env.NEXT_PUBLIC_HOST_UPLOAD_URL! + '?bucket=' + bucket, {
     body: formData,
     method: "POST",
     headers: { 'Authorization': `Bearer ${auth}` },
