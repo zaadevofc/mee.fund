@@ -58,7 +58,7 @@ $ npm run dev
 
 ## Support
 
-Ini merupakan project open source yang di lindungi [MIT License]()
+Ini merupakan project open source yang di lindungi [MIT License](https://github.com/zaadevofc/mee.fund?tab=MIT-1-ov-file)
 Hubungi email [zaadevofc@gmail.com](mailto:zaadevofc@gmail.com) jika sewaktu - waktu ada kendala.
 
 ## Privacy
