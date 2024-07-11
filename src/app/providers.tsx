@@ -17,14 +17,11 @@ const queryClient = new QueryClient();
 export const SystemContext = createContext(CONTEXT_DATA());
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
-  const [makePlaceholder, setMakePlaceholder] = useState<any>();
-  const [initSubmitType, setInitSubmitType] = useState<any>();
-  const [initTempPosts, setInitTempPosts] = useState<any>();
-  const [initTempComments, setInitTempComments] = useState<any>();
-  const [showAsideLeft, setShowAsideLeft] = useState(false);
   const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
 
   const [showAuthModal, setAuthModal] = useState(false);
+  const [showSubmitModal, setSubmitModal] = useState<any>({});
+  const [isSubmitFinish, setSubmitFinish] = useState(false);
 
   const setActiveVideo = useCallback((id: string | null) => {
     setActiveVideoId(id);
@@ -43,20 +40,14 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
       <SystemContext.Provider
         value={{
           ...CONTEXT_DATA({
-            makePlaceholder,
-            setMakePlaceholder,
-            initTempPosts,
-            setInitTempPosts,
-            initSubmitType,
-            setInitSubmitType,
-            initTempComments,
-            setInitTempComments,
-            showAsideLeft,
-            setShowAsideLeft,
+            showSubmitModal,
+            setSubmitModal,
             showAuthModal,
             setAuthModal,
             activeVideoId,
             setActiveVideo,
+            isSubmitFinish,
+            setSubmitFinish,
           }),
         }}
       >

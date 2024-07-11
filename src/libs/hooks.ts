@@ -37,7 +37,7 @@ export const postMedia = async (file: File, bucket: string) => {
   formData.append('bucket', bucket)
   formData.append('token', auth.toString())
 
-  return await fetch(BASE_URL_API + '/media/upload', {
+  return await fetch('https://cloudmeefund.deno.dev/upload', {
     body: formData,
     method: "POST",
     headers: { 'Authorization': `Bearer ${auth}` },
@@ -112,16 +112,15 @@ type CommentLikeActionsType = {
 export type CONTEXT_DATAType = {
   showAuthModal: boolean
   setAuthModal: (data: any) => any
-  showAsideLeft: boolean
-  setShowAsideLeft: (data: any) => any
-  makePlaceholder: any
-  setMakePlaceholder: (data: any) => any
-  initTempPosts: any
-  setInitTempPosts: (data: any) => any
-  initTempComments: any
-  setInitTempComments: (data: any) => any
-  initSubmitType: { type: 'posts' | 'comments', post_id?: string; parent_id?: string }
-  setInitSubmitType: (data: CONTEXT_DATAType['initSubmitType']) => any
+  isSubmitFinish: boolean
+  setSubmitFinish: (data: any) => any
+  showSubmitModal: {
+    open: boolean;
+    type?: 'posts' | 'comments';
+    post_id?: string;
+    parent_id?: string;
+  }
+  setSubmitModal: (data: any) => any
   activeVideoId: string | null;
   setActiveVideo: (id: string | null) => void;
 }
@@ -253,25 +252,25 @@ type HookType = {
 }
 
 export const usePosts = (payload: getManyPostsType, opts?: HookType) => {
-  return useSWR(!opts?.disabled && [`/posts/${payload.ids || ''}`, payload], fetchAPi)
+  return useSWR(!opts?.disabled && [`/posts/${payload.ids || ''}`, payload], fetchAPi, { revalidateOnFocus: false })
 }
 
 export const useComments = (payload: getManyCommentsType, opts?: HookType) => {
-  return useSWR(!opts?.disabled && [`/posts/${payload.post_id || ''}/comments`, payload], fetchAPi)
+  return useSWR(!opts?.disabled && [`/posts/${payload.post_id || ''}/comments`, payload], fetchAPi, { revalidateOnFocus: false })
 }
 
 export const useTopTags = (payload: getManyTagsType, opts?: HookType) => {
-  return useSWR(!opts?.disabled && [`/tags/trending`, payload], fetchAPi)
+  return useSWR(!opts?.disabled && [`/tags/trending`, payload], fetchAPi, { revalidateOnFocus: false })
 }
 
 export const useTopUsers = (payload: getManyUsersType, opts?: HookType) => {
-  return useSWR(!opts?.disabled && [`/users/suggestions`, payload], fetchAPi)
+  return useSWR(!opts?.disabled && [`/users/suggestions`, payload], fetchAPi, { revalidateOnFocus: false })
 }
 
 export const useUsers = (payload: getUserProfileType, opts?: HookType) => {
-  return useSWR(!opts?.disabled && [`/users/${payload.username || ''}`, payload], fetchAPi)
+  return useSWR(!opts?.disabled && [`/users/${payload.username || ''}`, payload], fetchAPi, { revalidateOnFocus: false })
 }
 
 export const useSearch = (payload: MakeSearchType, opts?: HookType) => {
-  return useSWR(!opts?.disabled && [`/search`, payload], fetchAPi)
+  return useSWR(!opts?.disabled && [`/search`, payload], fetchAPi, { revalidateOnFocus: false })
 }

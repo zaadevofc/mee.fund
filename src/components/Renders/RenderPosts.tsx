@@ -31,7 +31,9 @@ const RenderPosts = (props: RenderPostsType) => {
 
   return (
     <>
-      <div className="flex flex-col gap-3">{postsData?.data.posts.map((x: any, i: any) => <PostCard key={i} payload={x} index={i} />)}</div>
+      <div className="flex flex-col gap-3 max-[460px]:gap-5 max-[460px]:divide-y">
+        {postsData?.data.posts.map((x: any, i: any) => <PostCard type="posts" key={i} payload={x} index={i} />)}
+      </div>
     </>
   );
 };

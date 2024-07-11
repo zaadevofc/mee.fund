@@ -52,7 +52,7 @@ export const makeActions = async (props: makeActionsType) => {
 
       if (check) {
         await txKey.delete({ where: { id: check.id } });
-        return { action: 'un' + key };
+        return { action: 'un' + props.actions };
       } else {
         await txKey.create({
           data: {
@@ -60,7 +60,7 @@ export const makeActions = async (props: makeActionsType) => {
             [key]: { connect: { id: connectKey } }
           }
         });
-        return { action: key };
+        return { action: props.actions };
       }
     });
 

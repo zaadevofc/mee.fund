@@ -6,17 +6,13 @@ import { SystemContext } from '~/app/providers';
 import { CONTEXT_DATAType } from '~/libs/hooks';
 import Image from '../Services/Image';
 
-const SubmitCard = (props: CONTEXT_DATAType['initSubmitType']) => {
+const SubmitCard = (props: CONTEXT_DATAType['showSubmitModal']) => {
   const { data: user }: any = useSession();
-  const { setInitSubmitType } = useContext(SystemContext);
+  const { setSubmitModal } = useContext(SystemContext);
 
   return (
     <>
-      <label
-        htmlFor="make_post_modal"
-        onClick={() => setInitSubmitType!(props)}
-        className="flex cursor-pointer flex-col border p-3.5 active:scale-[.97] min-[460px]:rounded-lg"
-      >
+      <div onClick={() => setSubmitModal!(props)} className="flex cursor-pointer flex-col border p-3.5 active:scale-[.97] min-[460px]:rounded-lg">
         <div className="relative flex items-start gap-3 text-[15px]">
           <Image src={user?.picture} className="size-9 rounded-full" />
           <div className="flex w-full flex-col">
@@ -29,7 +25,7 @@ const SubmitCard = (props: CONTEXT_DATAType['initSubmitType']) => {
             <h1 className="text-shade text-sm">Klik untuk membuat {props?.type == 'posts' ? 'postingan.' : 'komentar.'}</h1>
           </div>
         </div>
-      </label>
+      </div>
     </>
   );
 };

@@ -82,7 +82,7 @@ const ExplorePage = () => {
             router.push(`${updateParams(params, 'tabs', x)}`);
           }}
         />
-        {isType == 'posts' && <div className="flex flex-col gap-3 max-[460px]:divide-y">{searchData?.data?.map((x: any) => <PostCard payload={x} />)}</div>}
+        {isType == 'posts' && <div className="flex flex-col gap-3 max-[460px]:divide-y">{searchData?.data?.map((x: any) => <PostCard type='posts' payload={x} />)}</div>}
 
         {isType == 'users' && (
           <div className="flex flex-col gap-3 max-[460px]:divide-y">

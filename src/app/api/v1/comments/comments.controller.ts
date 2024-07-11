@@ -1,6 +1,7 @@
 import { Hono } from "hono"
 import { createNewComment } from "./comments.service"
 import { MakeError } from "../[[...route]]/route"
+import { stringObj } from "~/libs/tools"
 
 const app = new Hono<{ Variables: any }>()
 
@@ -10,6 +11,7 @@ app.post('/new', async (c) => {
     if (check) return check;
 
     const { payload } = c.get('payload')
+    console.log("🚀 ~ app.post ~ payload:", stringObj(payload))
     const comment = await createNewComment({ payload })
 
     if (!comment) MakeError(400, 'FAILED_CREATE', 'Gagal menambahkan komentar, silahkan ulangi.')

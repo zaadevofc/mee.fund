@@ -3,27 +3,15 @@
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-  LuBadgeCheck,
-  LuBarChart2,
-  LuBell,
-  LuFastForward,
-  LuHelpCircle,
-  LuHome,
-  LuLaptop,
-  LuPlusCircle,
-  LuSearch,
-  LuSettings2,
-  LuShieldCheck,
-  LuTrophy,
-} from 'react-icons/lu';
+import { LuBadgeCheck, LuBarChart2, LuHome, LuPlusCircle, LuSearch, LuShieldCheck, LuTrophy } from 'react-icons/lu';
 import Image from '~/components/Services/Image';
+import { POST_CATEGORY } from '~/consts';
 import { cn } from '~/libs/tools';
 import Markdown from '../Services/Markdown';
-import { POST_CATEGORY } from '~/consts';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
-import { InputTextarea } from 'primereact/inputtextarea';
+import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import ModalSubmit from './ModalSubmit';
+import { useContext } from 'react';
+import { SystemContext } from '~/app/providers';
 
 const DEFAULT_SIDE = [
   { icon: LuHome, label: 'Beranda', href: '/' },
@@ -44,6 +32,7 @@ const MORE_SIDE = [
 const AsideLeft = () => {
   const path = usePathname();
   const { data: user }: any = useSession();
+  const { setSubmitModal } = useContext(SystemContext);
 
   return (
     <>
@@ -58,24 +47,18 @@ const AsideLeft = () => {
             <Markdown className="line-clamp-2 text-sm">{user ? user?.bio || 'Tidak ada bio' : 'Login untuk mengakses'}</Markdown>
           </div>
         </Link>
-        <Dialog>
-          <DialogTrigger className="border-none p-0">
-            <div className="flex flex-col rounded-xl border bg-white">
-              <div
-                className={cn(
-                  `group flex cursor-pointer items-center gap-3 px-6 py-3.5 font-medium active:scale-[.95]`,
-                  'hover:text-primary-500 [&_svg]:hover:stroke-primary-500'
-                )}
-              >
-                <LuPlusCircle className="flex-shrink-0 text-xl text-secondary-400" />
-                <h1 className="text-[15px] max-[1168px]:hidden">Buat Postingan</h1>
-              </div>
-            </div>
-          </DialogTrigger>
-          <DialogContent className="rounded-lg max-[460px]:h-dvh">
-            <ModalSubmit type="posts" />
-          </DialogContent>
-        </Dialog>
+        <div className="flex flex-col rounded-xl border bg-white">
+          <div
+            onClick={() => setSubmitModal!({ open: true, type: 'posts' })}
+            className={cn(
+              `group flex cursor-pointer items-center gap-3 px-6 py-3.5 font-medium active:scale-[.95]`,
+              'hover:text-primary-500 [&_svg]:hover:stroke-primary-500'
+            )}
+          >
+            <LuPlusCircle className="flex-shrink-0 text-xl text-secondary-400" />
+            <h1 className="text-[15px] max-[1168px]:hidden">Buat Postingan</h1>
+          </div>
+        </div>
         <div className="flex flex-col rounded-xl border bg-white">
           {DEFAULT_SIDE.map((x, i) => (
             <Link

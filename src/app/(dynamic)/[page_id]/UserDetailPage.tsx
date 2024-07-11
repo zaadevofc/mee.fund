@@ -86,10 +86,10 @@ const UserDetailPage = ({ user_id }: any) => {
                 </div>
                 <p className="text-gray-500">@{profile?.username}</p>
               </div>
-              <div className={cn('pr-2', !profile?.bio && 'hiddens')}>
+              <div className={cn('pr-2', !profile?.bio && 'hidden')}>
                 <Markdown
                   className={`text-[15px] leading-[21px]`}
-                  text={!!profile?.bio ? profile?.bio : 'Nisi consectetur magna labore ipsum ad proident labore aliquip aliqua.'}
+                  text={profile?.bio}
                 />
               </div>
               <div className={cn('mt-2 flex flex-wrap gap-1', profile?.role == 'BASIC' && 'hidden')}>
@@ -149,7 +149,7 @@ const UserDetailPage = ({ user_id }: any) => {
                               <InputTextarea
                                 name="bio"
                                 autoResize
-                                className="!text-[15px] leading-[21px]"
+                                className="!text-[15px] leading-[21px] w-full"
                                 defaultValue={profile?.bio}
                                 placeholder={'Buat bio yang menarik!'}
                               />
@@ -186,7 +186,7 @@ const UserDetailPage = ({ user_id }: any) => {
                         Bagikan
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="rounded-lg max-[460px]:h-dvh">
+                    <DialogContent className="rounded-lg">
                       <div className="relative flex flex-col gap-7">
                         <div className="flex flex-col">
                           <h1 className="text-lg font-semibold">Bagikan Profile</h1>

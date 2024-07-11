@@ -2,31 +2,18 @@
 
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useContext } from 'react';
-import {
-  LuBarChart2,
-  LuBell,
-  LuHome,
-  LuPlusCircle,
-  LuSearch,
-  LuSettings2,
-  LuTrophy,
-  LuUser2
-} from 'react-icons/lu';
+import { LuBarChart2, LuHome, LuPlusCircle, LuSearch, LuTrophy, LuUser2 } from 'react-icons/lu';
 import { SystemContext } from '~/app/providers';
 import { cn } from '~/libs/tools';
 import Brands from '../Services/Brands';
-import Image from '../Services/Image';
-import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
-import ModalSubmit from './ModalSubmit';
 
 const Navbar = () => {
   const { data: user }: any = useSession();
-  const { setInitSubmitType, setShowAsideLeft, setAuthModal } = useContext(SystemContext);
+  const { setAuthModal, setSubmitModal } = useContext(SystemContext);
 
   const path = usePathname();
-  const router = useRouter();
 
   const DEFAULT_SIDE = [
     { icon: LuHome, label: 'Beranda', href: '/' },
@@ -44,14 +31,7 @@ const Navbar = () => {
           <button onClick={() => setAuthModal!(true)} className={cn('rounded-lg bg-primary-500 text-white', user && 'hidden')}>
             Masuk
           </button>
-          <Dialog>
-            <DialogTrigger className={cn("border-none p-0 min-[590px]:hidden", !user && 'hidden')}>
-              <LuPlusCircle className="flex-shrink-0 text-2xl text-secondary-400" />
-            </DialogTrigger>
-            <DialogContent className="rounded-lg max-[460px]:h-dvh">
-              <ModalSubmit type="posts" />
-            </DialogContent>
-          </Dialog>
+          <LuPlusCircle onClick={() => setSubmitModal!({ open: true, type: 'posts' })} className="flex-shrink-0 text-2xl text-secondary-400" />
         </div>
       </nav>
       <nav className="fixed bottom-0 z-50 w-full bg-white min-[590px]:hidden">

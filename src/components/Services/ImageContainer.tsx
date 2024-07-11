@@ -18,20 +18,12 @@ type ImageContainerType = {
 };
 
 const ImageContainer = (props: ImageContainerType) => {
-  const temp = [
-    { src: '/posts.jpg', type: 'image/webp' },
-    { src: '/video.mp4', type: 'video/mp4' },
-    { src: '/posts.jpg', type: 'image/webp' },
-    { src: '/posts.jpg', type: 'image/webp' },
-    // { src: '/posts-2.jpg', type: 'image/webp' },
-  ];
-
   const IMGL = props?.media?.length || 0;
   if (IMGL === 0) return null;
 
   return (
     <PhotoProvider maskOpacity={0.9} className={cn(IMGL == 0 && 'hidden')}>
-      <ScrollContainer className={cn(`flex gap-0.5 overflow-x-auto`, props.className)}>
+      <ScrollContainer className={cn(`flex gap-0.5 overflow-x-auto !transition-none`, props.className)}>
         {props?.media?.map((x: any, i) => (
           <>
             <PhotoView src={x.src} triggers={props.triggers ?? (['onClick'] as any)}>
@@ -46,7 +38,7 @@ const ImageContainer = (props: ImageContainerType) => {
                     props.onMediaDoubleClick?.(x, i);
                   }}
                   src={x.src}
-                  className={cn('max-h-[60dvh] w-auto rounded-lg', IMGL > 2 && 'max-h-[50dvh]', props.small && 'max-h-[40dvh]')}
+                  className={cn('max-h-[60dvh] w-auto object-cover rounded-lg', IMGL > 2 && 'max-h-[50dvh]', props.small && 'max-h-[40dvh]')}
                   alt={`Image ${i + 1}`}
                 />
               )}
