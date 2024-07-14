@@ -7,13 +7,13 @@ const app = new Hono<{ Variables: any }>()
 app.post('/:type/:actions', async (c) => {
   try {
     const { type, actions } = c.req.param()
-    const check = c.get('validate')(['post_id | comment_id', 'user_id'])
+    const check = c.get('validate')(['post_id | comment_id | user_id | follower_id | following_id'])
     if (check) return check;
 
-    const { post_id, comment_id, user_id } = c.get('payload');
+    const { post_id, comment_id, user_id, follower_id, following_id } = c.get('payload');
 
     const make = await makeActions({
-      type, actions, post_id, comment_id, user_id
+      type, actions, post_id, comment_id, user_id, follower_id, following_id
     } as any)
 
     if (!make) MakeError(400, 'FAILED_CREATE', `Gagal, silahkan ulangi.`)

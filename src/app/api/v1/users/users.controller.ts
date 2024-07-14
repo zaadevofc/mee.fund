@@ -13,7 +13,7 @@ app.get('/suggestions', async (c) => {
     const { limit, offset } = c.get('payload')
     const suggests = await getManyUsers({
       limit, offset, options: {
-        select: { username: true, name: true, bio: true, picture: true, is_verified: true },
+        select: { username: true, name: true, bio: true, picture: true, is_verified: true, role: true },
         where: { visibility: 'PUBLIC', is_blocked: false },
         orderBy: { followers: { _count: 'desc' } }
       }

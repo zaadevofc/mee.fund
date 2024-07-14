@@ -3,14 +3,19 @@ import { MakeQueryError } from "../[[...route]]/route";
 
 export type makeActionsType = ({
   type: 'posts';
+  user_id: string;
   post_id: string;
   actions: 'likes' | 'bookmarks' | 'reposts';
 } | {
   type: 'comments';
+  user_id: string;
   comment_id: string;
   actions: 'likes'
-}) & {
-  user_id: string;
+}) | {
+  type: 'users';
+  follower_id: string;
+  following_id: string;
+  actions: 'follow'
 }
 
 export const makeActions = async (props: makeActionsType) => {
@@ -18,6 +23,7 @@ export const makeActions = async (props: makeActionsType) => {
     const init = {
       posts: { likes: 'postLike', bookmarks: 'bookmark', reposts: 'repost' },
       comments: { likes: 'commentLike' },
+      users: { follow: 'follow' }
     }
 
     const actions = await prisma.$transaction(async (tx) => {
@@ -48,19 +54,41 @@ export const makeActions = async (props: makeActionsType) => {
         });
       }
 
+        console.log({props})
+      if (props.type === 'users') {
+        check = await txKey.findUnique({
+          where: {
+            follower_id_following_id: {
+              follower_id: props.follower_id,
+              following_id: props.following_id
+            }
+          }
+        });
+      }
+
       const key = props.type.slice(0, -1);
 
       if (check) {
         await txKey.delete({ where: { id: check.id } });
         return { action: 'un' + props.actions };
       } else {
-        await txKey.create({
-          data: {
-            user: { connect: { id: props.user_id } },
-            [key]: { connect: { id: connectKey } }
-          }
-        });
-        return { action: props.actions };
+        if (props.type == 'users') {
+          await txKey.create({
+            data: {
+              follower_id: props.follower_id,
+              following_id: props.following_id
+            }
+          });
+          return { action: props.actions };
+        } else {
+          await txKey.create({
+            data: {
+              user: { connect: { id: props.user_id } },
+              [key]: { connect: { id: connectKey } }
+            }
+          });
+          return { action: props.actions };
+        }
       }
     });
 

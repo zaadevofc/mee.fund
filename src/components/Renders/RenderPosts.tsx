@@ -1,10 +1,12 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
+import dynamic from 'next/dynamic';
 import { getManyPostsType } from '~/app/api/v1/posts/posts.service';
 import { FetchPostsType, usePosts } from '~/libs/hooks';
-import ChildAlerts from '../Services/ChildAlerts';
 import PostCard from '../Services/PostCard';
+
+const ChildAlerts = dynamic(() => import('../Services/ChildAlerts'));
 
 type RenderPostsType = {
   type?: getManyPostsType['type'];

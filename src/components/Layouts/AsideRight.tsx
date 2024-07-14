@@ -1,13 +1,13 @@
 'use client';
 
+import { useWindowWidth } from '@react-hook/window-size';
 import Link from 'next/link';
+import { LuBadgeCheck } from 'react-icons/lu';
 import Image from '~/components/Services/Image';
 import { useTopTags, useTopUsers } from '~/libs/hooks';
 import { cn } from '~/libs/tools';
-import Markdown from '../Services/Markdown';
 import ChildAlerts from '../Services/ChildAlerts';
-import { useWindowWidth } from '@react-hook/window-size';
-import { LuBadgeCheck } from 'react-icons/lu';
+import Markdown from '../Services/Markdown';
 
 const AsideRight = () => {
   const windowWidth = useWindowWidth();
@@ -49,9 +49,9 @@ const AsideRight = () => {
             <Link href={`/@${x?.username}`} className="group flex gap-3 p-5 py-3.5">
               <Image className="size-10 rounded-full border group-hover:rounded-lg" src={x?.picture} />
               <div className="flex flex-col text-[15px]">
-                <div className="flex items-center">
+                <div className="flex">
                   <h1 className="font-bold group-hover:text-primary-500">{x?.name}</h1>
-                  {x.is_verified && <LuBadgeCheck className="fill-sky-500 stroke-white text-lg" />}
+                  {x.is_verified && <LuBadgeCheck className={cn('fill-sky-500 stroke-white text-xl', x?.role == 'AUTHOR' && 'fill-purple-500')} />}
                 </div>
                 <Markdown className="line-clamp-2 text-sm" text={x?.bio || `@${x?.username}`} />
               </div>

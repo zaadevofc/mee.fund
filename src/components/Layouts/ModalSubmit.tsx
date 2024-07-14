@@ -1,24 +1,25 @@
 'use client';
 
+import { useWindowWidth } from '@react-hook/window-size';
 import { MutateOptions } from '@tanstack/react-query';
+import bytes from 'bytes';
+import keygen from 'keygen';
+import mime from 'mime-types';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { memo, useCallback, useContext, useState } from 'react';
 import toast from 'react-hot-toast';
 import { LuArrowRight, LuCheck, LuPlusCircle } from 'react-icons/lu';
 import { SystemContext } from '~/app/providers';
 import { POST_CATEGORY } from '~/consts';
+import { postMedia } from '~/libs/hooks';
 import { extractTags } from '~/libs/tools';
 import { cn } from '~/libs/utils';
 import ImageContainer from '../Services/ImageContainer';
 import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
-
-import { useRouter } from 'next/navigation';
-import { postMedia } from '~/libs/hooks';
-import bytes from 'bytes';
-import keygen from 'keygen';
-import mime from 'mime-types';
+import { Drawer, DrawerContent } from '../ui/drawer';
 
 const textLabeling = {
   posts: {
@@ -39,6 +40,7 @@ const ModalSubmit = memo(() => {
   const [isMediaList, setMediaList] = useState([]);
   const [isCategory, setCategory] = useState('');
 
+  const windowWitdh = useWindowWidth();
   const { data: user }: any = useSession();
   const router = useRouter();
   const { CreateNewPost, CreateNewComment, showSubmitModal, setSubmitModal, setSubmitFinish } = useContext(SystemContext);
@@ -227,80 +229,98 @@ const ModalSubmit = memo(() => {
     }
   };
 
-  return (
-    <>
-      <Dialog open={showSubmitModal?.open} onOpenChange={x => setSubmitModal!((p: any) => ({ ...p, open: x }))}>
-        <DialogContent className="rounded-lg max-[460px]:h-dvh">
-          <div className="flex flex-col gap-3">
-            <h1 className="text-lg font-semibold">{showSubmitModal?.type == 'posts' ? 'Buat postingan baru' : 'Berikan komentar'}</h1>
-            <div className="flex flex-col gap-2">
-              <InputTextarea
-                id="textinput"
-                autoResize
+  const Content = ({ className }: any) => {
+    return (
+      <div className={cn("flex flex-col gap-3", className)}>
+        <h1 className="text-lg font-semibold">{showSubmitModal?.type == 'posts' ? 'Buat postingan baru' : 'Berikan komentar'}</h1>
+        <div className="flex flex-col gap-2">
+          <InputTextarea
+            id="textinput"
+            autoResize
+            disabled={isLoading || !user}
+            placeholder={textLabeling[showSubmitModal?.type!]?.placeholder}
+            className="!p-0 text-[15px] leading-[21px]"
+          />
+          <ImageContainer
+            triggers={['onDoubleClick']}
+            small
+            media={isMediaList.map((x: any) => ({ src: x.url, type: x.file.type }))}
+            onMediaClick={(x: any, i) => {
+              !isLoading && user && setMediaList(f => f.filter((y: any) => y.url != x.src));
+            }}
+          />
+        </div>
+        <div className="flex w-full items-center gap-2">
+          <input onChange={handleMedia} multiple type="file" accept="image/*, video/*" id="file_upload" className="hidden" disabled={isLoading || !user} />
+          <Button size={'sm'} variant={'outline'}>
+            <label htmlFor="file_upload" className="flex cursor-pointer items-center gap-x-2">
+              <LuPlusCircle className="text-shade text-lg" /> Tambah File
+            </label>
+          </Button>
+          <Dialog open={showSubmitModal?.type == 'posts' && isCanNext ? undefined : false}>
+            <DialogTrigger className="ml-auto border-none p-0" disabled={isLoading || !user}>
+              <Button
                 disabled={isLoading || !user}
-                placeholder={textLabeling[showSubmitModal?.type!]?.placeholder}
-                className="!p-0 text-[15px] leading-[21px]"
-              />
-              <ImageContainer
-                triggers={['onDoubleClick']}
-                small
-                media={isMediaList.map((x: any) => ({ src: x.url, type: x.file.type }))}
-                onMediaClick={(x: any, i) => {
-                  !isLoading && user && setMediaList(f => f.filter((y: any) => y.url != x.src));
-                }}
-              />
-            </div>
-            <div className="flex w-full items-center gap-2">
-              <input onChange={handleMedia} multiple type="file" accept="image/*, video/*" id="file_upload" className="hidden" disabled={isLoading || !user} />
-              <Button size={'sm'} variant={'outline'}>
-                <label htmlFor="file_upload" className="flex cursor-pointer items-center gap-x-2">
-                  <LuPlusCircle className="text-shade text-lg" /> Tambah File
-                </label>
+                onClick={showSubmitModal?.type == 'posts' ? canNext : handlePrepare}
+                size={'sm'}
+                variant={'secondary'}
+                className="gap-x-2"
+              >
+                <LuArrowRight className="text-shade text-lg" /> {showSubmitModal?.type == 'posts' ? 'Lanjut' : 'Kirim'}
               </Button>
-              <Dialog open={showSubmitModal?.type == 'posts' && isCanNext ? undefined : false}>
-                <DialogTrigger className="ml-auto border-none p-0" disabled={isLoading || !user}>
-                  <Button
-                    disabled={isLoading || !user}
-                    onClick={showSubmitModal?.type == 'posts' ? canNext : handlePrepare}
-                    size={'sm'}
-                    variant={'secondary'}
-                    className="gap-x-2"
-                  >
-                    <LuArrowRight className="text-shade text-lg" /> {showSubmitModal?.type == 'posts' ? 'Lanjut' : 'Kirim'}
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="rounded-lg p-1 max-[460px]:h-dvh">
-                  <div className="relative flex flex-col gap-3">
-                    <h1 className="p-4 text-lg font-semibold">Pilih Kategori</h1>
-                    <div className="hide-scroll flex max-h-[90dvh] flex-col items-start gap-3 overflow-y-scroll pb-20 min-[460px]:max-h-[60dvh]">
-                      {POST_CATEGORY.slice(1).map((x, i) => {
-                        const value = x.label.replaceAll(' ', '_').toUpperCase();
-                        return (
-                          <Button
-                            onClick={() => setCategory(value)}
-                            variant={isCategory == value ? 'secondary' : 'ghost'}
-                            className="w-full justify-start gap-x-4 border-none"
-                          >
-                            <x.icon className="text-shade text-lg" /> {x.label}
-                            {isCategory == value && <LuCheck className="text-shade ml-auto text-lg" />}
-                          </Button>
-                        );
-                      })}
-                    </div>
-                    <div className={cn('absolute bottom-0 flex w-full items-center border-t bg-secondary-50 p-4', !isCategory && 'hidden')}>
-                      <Button disabled={isLoading || !user} onClick={handlePrepare} size={'sm'} variant={'secondary'} className="ml-auto gap-x-2">
-                        <LuArrowRight className="text-shade text-lg" /> Kirim
+            </DialogTrigger>
+            <DialogContent className="rounded-lg p-1 max-[460px]:h-dvh">
+              <div className="relative flex flex-col gap-3">
+                <h1 className="p-4 text-lg font-semibold">Pilih Kategori</h1>
+                <div className="hide-scroll flex max-h-[90dvh] flex-col items-start gap-3 overflow-y-scroll pb-20 min-[460px]:max-h-[60dvh]">
+                  {POST_CATEGORY.slice(1).map((x, i) => {
+                    const value = x.label.replaceAll(' ', '_').toUpperCase();
+                    return (
+                      <Button
+                        onClick={() => setCategory(value)}
+                        variant={isCategory == value ? 'secondary' : 'ghost'}
+                        className="w-full justify-start gap-x-4 border-none"
+                      >
+                        <x.icon className="text-shade text-lg" /> {x.label}
+                        {isCategory == value && <LuCheck className="text-shade ml-auto text-lg" />}
                       </Button>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
+                    );
+                  })}
+                </div>
+                <div className={cn('absolute bottom-0 flex w-full items-center border-t bg-secondary-50 p-4', !isCategory && 'hidden')}>
+                  <Button disabled={isLoading || !user} onClick={handlePrepare} size={'sm'} variant={'secondary'} className="ml-auto gap-x-2">
+                    <LuArrowRight className="text-shade text-lg" /> Kirim
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+      </div>
+    );
+  };
+
+  if (windowWitdh < 460)
+    return (
+      <>
+        <Drawer open={showSubmitModal?.open} onOpenChange={(x: any) => setSubmitModal!((p: any) => ({ ...p, open: x }))}>
+          <DrawerContent className="h-dvh rounded-lg p-4">
+            <Content className="mt-4" />
+          </DrawerContent>
+        </Drawer>
+      </>
+    );
+
+  if (windowWitdh > 460)
+    return (
+      <>
+        <Dialog open={showSubmitModal?.open} onOpenChange={(x: any) => setSubmitModal!((p: any) => ({ ...p, open: x }))}>
+          <DialogContent className="rounded-lg">
+            <Content />
+          </DialogContent>
+        </Dialog>
+      </>
+    );
 });
 
 export default ModalSubmit;

@@ -21,6 +21,8 @@ const withPWA = withPWAInit({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  productionBrowserSourceMaps: true,
+  output: 'standalone',
   i18n: {
     localeDetection: false,
     locales: ['id'],

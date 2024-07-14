@@ -38,7 +38,7 @@ const ImageContainer = (props: ImageContainerType) => {
                     props.onMediaDoubleClick?.(x, i);
                   }}
                   src={x.src}
-                  className={cn('max-h-[60dvh] w-auto object-cover rounded-lg', IMGL > 2 && 'max-h-[50dvh]', props.small && 'max-h-[40dvh]')}
+                  className={cn('max-h-[60vh] w-auto object-cover rounded-lg', IMGL > 2 && 'max-h-[50vh]', props.small && 'max-h-[40vh]')}
                   alt={`Image ${i + 1}`}
                 />
               )}
@@ -53,7 +53,7 @@ const ImageContainer = (props: ImageContainerType) => {
                   e.stopPropagation();
                   props.onMediaDoubleClick?.(x, i);
                 }}
-                className={cn('max-h-[60dvh] w-auto rounded-lg', IMGL > 2 && 'max-h-[50dvh]', props.small && 'max-h-[40dvh]')}
+                className={cn('max-h-[60vh] w-auto rounded-lg', IMGL > 2 && 'max-h-[50vh]', props.small && 'max-h-[40vh]')}
                 autoPlay
                 muted
                 loop

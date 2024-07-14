@@ -4,19 +4,18 @@ import { DialogClose } from '@radix-ui/react-dialog';
 import { signOut, useSession } from 'next-auth/react';
 import { notFound } from 'next/navigation';
 import { InputTextarea } from 'primereact/inputtextarea';
-import { useState } from 'react';
-import { GoHeart, GoPeople, GoPerson } from 'react-icons/go';
-import { LuBadgeCheck, LuCopy, LuFastForward, LuForward, LuHeart, LuPenSquare, LuSave, LuSaveAll, LuUser2, LuUsers2 } from 'react-icons/lu';
+import { useContext, useMemo, useState } from 'react';
+import { LuBadgeCheck, LuCopy, LuSave } from 'react-icons/lu';
 import { editUserProfileType } from '~/app/api/v1/users/users.service';
+import { SystemContext } from '~/app/providers';
 import Container from '~/components/Layouts/Container';
 import HeaderTabs from '~/components/Layouts/HeaderTabs';
 import RenderPosts from '~/components/Renders/RenderPosts';
-import ChildAlerts from '~/components/Services/ChildAlerts';
 import Image from '~/components/Services/Image';
 import Markdown from '~/components/Services/Markdown';
 import { Badge } from '~/components/ui/badge';
 import { Button } from '~/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '~/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '~/components/ui/dialog';
 import { Input } from '~/components/ui/input';
 import { Switch } from '~/components/ui/switch';
 import { SEO } from '~/consts';
@@ -27,6 +26,7 @@ import { cn } from '~/libs/utils';
 const UserDetailPage = ({ user_id }: any) => {
   if (!user_id.startsWith('@')) return notFound();
 
+  const [isActions, setActions] = useState({ followers: false });
   const [isType, setType] = useState<any>('');
   const [isFollow, setFollow] = useState(false);
 
@@ -34,10 +34,31 @@ const UserDetailPage = ({ user_id }: any) => {
   const username = user_id.substring(1);
 
   const { data: usersData, isLoading: usersLoading } = useUsers({ username, request_id: user?.id || '' });
+  const { CreateNewActions } = useContext(SystemContext);
+  const createNewActions = CreateNewActions();
 
   const profile = usersData?.data;
   const isSelf = user?.username == username;
   const hasFollow = profile?.followers?.length > 0;
+
+  const indicator = (has: boolean, actions: keyof typeof isActions) => (has ? (!isActions[actions] ? -1 : 0) : isActions[actions] ? 1 : 0);
+  const getValues = (has: boolean, actions: keyof typeof isActions) =>
+    (has ? (isActions[actions] ? -1 : 0) : isActions[actions] ? 1 : 0) + (profile?._count?.[actions] || 0);
+  const makeActions = useMemo(
+    () => async (actions: keyof typeof isActions) => {
+      setActions(x => ({ ...x, [actions]: !x[actions] }));
+      await createNewActions.mutate({
+        type: 'users',
+        actions: 'follow',
+        follower_id: profile?.id,
+        following_id: user?.id,
+      });
+    },
+    [profile]
+  );
+
+  const actionsMark = [['border-primary-500']];
+  const ACTION = [{ active: indicator(hasFollow, 'followers'), value: [getValues(hasFollow, 'followers'), 'followers'], click: makeActions }];
 
   const [isPrivate, setPrivate] = useState(profile?.visibility == 'PRIVATE');
 
@@ -82,15 +103,12 @@ const UserDetailPage = ({ user_id }: any) => {
               <div>
                 <div className="flex items-center text-xl min-[460px]:text-2xl">
                   <h1 className="font-bold">{profile?.name}</h1>
-                  {profile?.is_verified && <LuBadgeCheck className="fill-sky-500 stroke-white text-xl" />}
+                  {profile?.is_verified && <LuBadgeCheck className={cn('fill-sky-500 stroke-white text-xl', profile?.role == 'AUTHOR' && 'fill-purple-500')} />}
                 </div>
                 <p className="text-gray-500">@{profile?.username}</p>
               </div>
               <div className={cn('pr-2', !profile?.bio && 'hidden')}>
-                <Markdown
-                  className={`text-[15px] leading-[21px]`}
-                  text={profile?.bio}
-                />
+                <Markdown className={`text-[15px] leading-[21px]`} text={profile?.bio} />
               </div>
               <div className={cn('mt-2 flex flex-wrap gap-1', profile?.role == 'BASIC' && 'hidden')}>
                 <Badge className="flex gap-0.5 text-[10px]" variant={'outline'}>
@@ -102,17 +120,17 @@ const UserDetailPage = ({ user_id }: any) => {
           </div>
           <div className="flex flex-col gap-4">
             <div className="text-shade flex w-full items-center gap-5 text-[15px]">
-              <div className="flex gap-1">
-                <GoPeople className="flex-shrink-0 text-xl" />
-                <p>{profile?._count?.followers}</p>
+              <div className="flex items-center gap-1">
+                <p className="font-semibold">{getValues(hasFollow, 'followers')}</p>
+                <h1 className="text-sm">Pengikut</h1>
               </div>
-              <div className="flex gap-1">
-                <GoPerson className="flex-shrink-0 text-xl" />
-                <p>{profile?._count?.following}</p>
+              <div className="flex items-center gap-1">
+                <p className="font-semibold">{profile?._count?.following}</p>
+                <h1 className="text-sm">Mengikuti</h1>
               </div>
-              <div className="flex gap-1">
-                <GoHeart className="flex-shrink-0 text-xl" />
-                <p>{profile?._count?.post_likes}</p>
+              <div className="flex items-center gap-1">
+                <p className="font-semibold">{profile?._count?.post_likes}</p>
+                <h1 className="text-sm">Suka</h1>
               </div>
             </div>
             <div className="flex w-full items-center gap-3">
@@ -149,7 +167,7 @@ const UserDetailPage = ({ user_id }: any) => {
                               <InputTextarea
                                 name="bio"
                                 autoResize
-                                className="!text-[15px] leading-[21px] w-full"
+                                className="w-full !text-[15px] leading-[21px]"
                                 defaultValue={profile?.bio}
                                 placeholder={'Buat bio yang menarik!'}
                               />
@@ -177,9 +195,18 @@ const UserDetailPage = ({ user_id }: any) => {
                 </>
               ) : (
                 <>
-                  <Button variant={'outline'} className={cn('w-full', hasFollow ? 'border-primary-500' : '!bg-primary-500 !text-white')}>
-                    {hasFollow ? 'Mengikuti' : 'Ikuti'}
-                  </Button>
+                  {ACTION.map((x, i) => (
+                    <Button
+                      onClick={e => {
+                        e.stopPropagation();
+                        x.click(x.value[1]);
+                      }}
+                      variant={'outline'}
+                      className={cn('w-full border-primary-500', !x.active && '!bg-primary-500 !text-white')}
+                    >
+                      {x.active ? 'Mengikuti' : 'Ikuti'}
+                    </Button>
+                  ))}
                   <Dialog>
                     <DialogTrigger className="w-full border-none p-0">
                       <Button variant={'outline'} className="w-full">

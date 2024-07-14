@@ -22,11 +22,11 @@
 
 @layer components {
   .markdown a {
-    @apply text-blue-500;
+    @apply !text-blue-600;
   }
 
   .markdown img {
-    @apply hidden;
+    @apply !hidden;
   }
 
   textarea {

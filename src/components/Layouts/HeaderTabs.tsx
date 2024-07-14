@@ -32,7 +32,7 @@ const HeaderTabs = (props: HeaderTabsType) => {
               handleTab(x);
             }}
             className={cn(
-              'group relative w-auto cursor-pointer text-center text-sm max-[460px]:text-[15px] flex-shrink-0 px-4',
+              'group relative w-auto cursor-pointer text-center text-sm min-[460px]:text-[15px] flex-shrink-0 px-4',
               isValue == x.value && 'font-semibold text-primary-500',
               isValue != x.value && 'group-hover:text-primary-500'
             )}

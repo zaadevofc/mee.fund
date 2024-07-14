@@ -2,6 +2,11 @@
   "name": "MeeFund",
   "short_name": "MeeFund",
   "description": "Panggung buat ide-idemu yang paling gokil. Mulai dari proyek kreatif, inovasi, sampai hiburan seru, semua bisa dapat tempat di MeeFund. Jadi, tunggu apa lagi? Saatnya unjuk gigi!",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "start_url": ".",
+  "display": "standalone",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -13,10 +18,5 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "start_url": "/",
-  "display": "standalone",
-  "orientation": "portrait"
+  ]
 }

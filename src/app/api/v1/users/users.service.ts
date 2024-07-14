@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
-import prisma from "~/prisma"
-import { MakeError, MakeQueryError } from "../[[...route]]/route"
 import { exclude } from '~/libs/tools';
+import prisma from "~/prisma";
+import { MakeQueryError } from "../[[...route]]/route";
 
 export type getUserProfileType = {
   id?: string
@@ -17,6 +17,7 @@ export type getManyUsersType = {
 }
 
 export const USER_BASIC_SCHEMA = {
+  id: true,
   name: true,
   role: true,
   username: true,
@@ -57,13 +58,18 @@ export const getManyUsers = async (props: getManyUsersType) => {
 
 export const getUserProfile = async (props: getUserProfileType) => {
   try {
+    const post_likes = await prisma.postLike.count({
+      where: { post: { user: { username: props.username } } }
+    })
+
     const profile = await getManyUsers({
       limit: 1, offset: 0,
       options: {
         where: exclude(props, ['request_id']),
         select: {
           ...USER_BASIC_SCHEMA,
-          ...(props.request_id && { followers: { where: { follower: { id: props.request_id } } } }),
+          ...(props.request_id && { followers: { where: { following: { id: props.request_id } } } }),
+          posts: { select: { _count: { select: { likes: true } } } },
           _count: {
             select: {
               posts: true,
@@ -72,14 +78,14 @@ export const getUserProfile = async (props: getUserProfileType) => {
               post_likes: true,
               bookmarks: true,
               reposts: true,
-            }
-          }
+            },
+          },
         },
         ...props?.options
       }
     })
 
-    return profile?.[0];
+    return { ...profile?.[0], _count: { ...(profile?.[0] as any)?._count, post_likes } };
   } catch (e) {
     console.log("🚀 ~ getUserProfile ~ e:", e)
     MakeQueryError()

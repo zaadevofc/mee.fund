@@ -3,15 +3,13 @@
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useContext } from 'react';
 import { LuBadgeCheck, LuBarChart2, LuHome, LuPlusCircle, LuSearch, LuShieldCheck, LuTrophy } from 'react-icons/lu';
+import { SystemContext } from '~/app/providers';
 import Image from '~/components/Services/Image';
 import { POST_CATEGORY } from '~/consts';
 import { cn } from '~/libs/tools';
 import Markdown from '../Services/Markdown';
-import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
-import ModalSubmit from './ModalSubmit';
-import { useContext } from 'react';
-import { SystemContext } from '~/app/providers';
 
 const DEFAULT_SIDE = [
   { icon: LuHome, label: 'Beranda', href: '/' },
@@ -40,9 +38,9 @@ const AsideLeft = () => {
         <Link href={user ? `/@${user?.username}` : ''} className="flex gap-4 rounded-xl border bg-white p-5 py-3.5 max-[1168px]:!p-3.5">
           <Image className="size-10 w-fit rounded-full" src={user?.picture} />
           <div className="flex flex-col text-[15px] max-[1168px]:hidden">
-            <div className="flex items-center">
+            <div className="flex">
               <h1 className="line-clamp-1 font-bold">{user?.name ?? 'MeeFund'}</h1>
-              {user?.is_verified && <LuBadgeCheck className="fill-sky-500 stroke-white text-lg" />}
+              {user?.is_verified && <LuBadgeCheck className={cn('fill-sky-500 stroke-white text-lg', user?.role == 'AUTHOR' && 'fill-purple-500')} />}
             </div>
             <Markdown className="line-clamp-2 text-sm">{user ? user?.bio || 'Tidak ada bio' : 'Login untuk mengakses'}</Markdown>
           </div>

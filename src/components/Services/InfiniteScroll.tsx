@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { default as InfiniteScrollWrapper } from 'react-infinite-scroll-component';
+// import { default as InfiniteScrollWrapper } from 'react-infinite-scroll-component';
 import ChildLoading from './ChildAlerts';
 
 type InfiniteScrollType = {
@@ -14,7 +14,7 @@ const InfiniteScroll = (props: InfiniteScrollType) => {
 
   return (
     <>
-      <InfiniteScrollWrapper
+      {/* <InfiniteScrollWrapper
         dataLength={props.items?.length || 0}
         next={props.loadMore}
         hasMore={props.hasMore}
@@ -25,9 +25,9 @@ const InfiniteScroll = (props: InfiniteScrollType) => {
         }
         loader={<ChildLoading />}
         className="hide-scroll flex flex-col gap-7 !overflow-hidden"
-      >
+      > */}
         {RenderData}
-      </InfiniteScrollWrapper>
+      {/* </InfiniteScrollWrapper> */}
     </>
   );
 };

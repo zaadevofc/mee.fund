@@ -88,16 +88,44 @@ const PostCard = memo((props: PostCardType) => {
     { icon: bookmarked ? GoBookmarkFill : GoBookmark, active: bookmarked, value: [getValues(hasBookmark, 'bookmarks'), 'bookmarks'], click: makeActions },
   ];
 
-  const Content = () => (
-    <div className={cn('flex flex-col gap-3', !props.asComment ? 'text-[15px]' : 'text-[14px]')}>
-      {props?.payload?.content && <Markdown text={props?.payload?.content} />}
-      <ImageContainer
-        id={props.payload?.ids}
-        videoAutoPlay={!props.asComment}
-        small={props.asComment}
-        media={props?.payload?.media.map((x: any) => ({ src: x?.url, type: x?.mimetype }))}
-      />
-    </div>
+  const Content = useMemo(
+    () => (
+      <div className={cn('flex flex-col gap-3', !props.asComment ? 'text-[15px]' : 'text-[14px]')}>
+        {props?.payload?.content && <Markdown text={props?.payload?.content} />}
+        <ImageContainer
+          id={props.payload?.ids}
+          videoAutoPlay={!props.asComment}
+          small={props.asComment}
+          media={props?.payload?.media.map((x: any) => ({ src: x?.url, type: x?.mimetype }))}
+        />
+      </div>
+    ),
+    []
+  );
+
+  const Actions = useMemo(
+    () => (
+      <div className={cn('flex items-center gap-5', props.asComment && 'pl-10')}>
+        {ACTION.slice(0, props.asComment ? -2 : 4).map((x, i) => (
+          <div
+            onClick={e => {
+              e.stopPropagation();
+              x.click(x.value[1]);
+            }}
+            className={cn(
+              'flex cursor-pointer items-center gap-1 active:scale-[.90]',
+              props.asComment ? 'text-base' : 'text-[19px]',
+              x.value[1] == 'bookmarks' && 'ml-auto',
+              x.active && actionsMark[i][0]
+            )}
+          >
+            <x.icon />
+            <h1 className="text-[13px]">{x.value[0] || ''}</h1>
+          </div>
+        ))}
+      </div>
+    ),
+    [ACTION]
   );
 
   return (
@@ -114,37 +142,21 @@ const PostCard = memo((props: PostCardType) => {
       >
         <div className={cn('flex gap-3', !props.asComment && 'items-center')}>
           <Image className={cn('rounded-lg border', props.asComment ? 'size-8' : 'size-9')} src={props.payload?.user?.picture} />
-          <div className={cn('flex w-full flex-col text-sm', props.asComment && 'gap-0.5 text-[13px]')}>
-            <div className="flex w-full items-center">
-              <h1 onClick={e => handle(e, router.push(`/@${props.payload?.user?.username}`))} className="font-bold hover:underline">
+          <div className={cn('flex w-full flex-col overflow-hidden text-sm', props.asComment && 'gap-0.5 text-[13px]')}>
+            <div className="flex w-full">
+              <h1 onClick={e => handle(e, router.push(`/@${props.payload?.user?.username}`))} className="font-bold cursor-pointer hover:underline">
                 {props.payload?.user?.name}
               </h1>
-              {props.payload?.user?.is_verified && <LuBadgeCheck className="fill-sky-500 stroke-white text-lg" />}
+              {props.payload?.user?.is_verified && (
+                <LuBadgeCheck className={cn('fill-sky-500 stroke-white text-lg', props.payload?.user?.role == 'AUTHOR' && 'fill-purple-500')} />
+              )}
             </div>
             <p className={cn('text-xs text-secondary-300', !props.payload?.category && 'hidden')}>{props.payload?.category?.replaceAll('_', ' ')}</p>
-            {props.asComment && <Content />}
+            {props.asComment && Content}
           </div>
         </div>
-        {!props.asComment && <Content />}
-        <div className={cn('flex items-center gap-5', props.asComment && 'pl-10')}>
-          {ACTION.slice(0, props.asComment ? -2 : 4).map((x, i) => (
-            <div
-              onClick={e => {
-                e.stopPropagation();
-                x.click(x.value[1]);
-              }}
-              className={cn(
-                'flex cursor-pointer items-center gap-1 active:scale-[.90]',
-                props.asComment ? 'text-base' : 'text-[19px]',
-                x.value[1] == 'bookmarks' && 'ml-auto',
-                x.active && actionsMark[i][0]
-              )}
-            >
-              <x.icon />
-              <h1 className="text-[13px]">{x.value[0] || ''}</h1>
-            </div>
-          ))}
-        </div>
+        {!props.asComment && Content}
+        {Actions}
         <div className={cn('ml-10 flex flex-col', !showReply && 'hidden')}>{props.children}</div>
         {props.showReplyButton && props.asComment && !!props.payload?.replies?.length && (
           <button onClick={() => setShowReply(x => !x)} className={cn('ml-10 w-fit bg-secondary-50 text-[13px]', showReply && 'mt-3')}>
@@ -161,11 +173,13 @@ const PostCard = memo((props: PostCardType) => {
         >
           <Image className="size-8 rounded-lg border" src={props.payload?.comments?.[0]?.user?.picture} />
           <div className="flex flex-col text-sm">
-            <div className="flex items-center">
-              <h1 onClick={e => handle(e, router.push(`/@${props.payload?.comments?.[0]?.user?.username}`))} className="font-bold hover:underline">
+            <div className="flex">
+              <h1 onClick={e => handle(e, router.push(`/@${props.payload?.comments?.[0]?.user?.username}`))} className="font-bold cursor-pointer hover:underline">
                 {props.payload?.comments?.[0]?.user?.name}
               </h1>
-              {props.payload?.comments?.[0]?.user?.is_verified && <LuBadgeCheck className="fill-sky-500 stroke-white text-lg" />}
+              {props.payload?.comments?.[0]?.user?.is_verified && (
+                <LuBadgeCheck className={cn('fill-sky-500 stroke-white text-lg', props.payload?.comments?.[0]?.user?.role == 'AUTHOR' && 'fill-purple-500')} />
+              )}
             </div>
             <Markdown className="line-clamp-2 leading-[17px]" text={props.payload?.comments?.[0]?.content} />
           </div>

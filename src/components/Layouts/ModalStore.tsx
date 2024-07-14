@@ -4,7 +4,6 @@ import { signIn } from 'next-auth/react';
 import { useContext } from 'react';
 import { SystemContext } from '~/app/providers';
 import Image from '../Services/Image';
-import { LuX } from 'react-icons/lu';
 import { Dialog, DialogContent } from '../ui/dialog';
 
 const ModalStore = () => {

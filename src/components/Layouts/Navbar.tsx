@@ -31,7 +31,7 @@ const Navbar = () => {
           <button onClick={() => setAuthModal!(true)} className={cn('rounded-lg bg-primary-500 text-white', user && 'hidden')}>
             Masuk
           </button>
-          <LuPlusCircle onClick={() => setSubmitModal!({ open: true, type: 'posts' })} className="flex-shrink-0 text-2xl text-secondary-400" />
+          <LuPlusCircle onClick={() => setSubmitModal!({ open: true, type: 'posts' })} className={cn("flex-shrink-0 text-2xl cursor-pointer text-secondary-400", !user && 'hidden')} />
         </div>
       </nav>
       <nav className="fixed bottom-0 z-50 w-full bg-white min-[590px]:hidden">

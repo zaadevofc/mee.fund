@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+
 import Container from '~/components/Layouts/Container';
 import RenderPosts from '~/components/Renders/RenderPosts';
 

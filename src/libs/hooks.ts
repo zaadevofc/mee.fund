@@ -113,6 +113,7 @@ export const CONTEXT_DATA = (props?: CONTEXT_DATAType) => {
     // HANDLE ACTIONS
     CreateNewActions: () => useMutationFetch<makeActionsType>(
       async (payload) => {
+        console.log("🚀 ~ payload:", payload)
         const token = await signJWT(payload, 180)
         return await postJson(BASE_URL_API + `/actions/${payload.type}/${payload.actions}`, { token })
       },
